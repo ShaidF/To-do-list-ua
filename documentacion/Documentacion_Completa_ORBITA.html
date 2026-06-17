@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentación — ÓRBITA | Proyecto Grupal Fase 1</title>
+  <style>
+    @page { size: A4; margin: 2cm; }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Segoe UI", Georgia, serif;
+      font-size: 11pt;
+      line-height: 1.55;
+      color: #1a2a3a;
+      max-width: 21cm;
+      margin: 0 auto;
+      padding: 1.5cm 2cm 3cm;
+      background: #fff;
+    }
+    .caratula {
+      text-align: center;
+      page-break-after: always;
+      padding: 3cm 1cm;
+      border: 3px double #0066cc;
+      margin-bottom: 2cm;
+    }
+    .caratula h1 {
+      font-size: 22pt;
+      color: #0066cc;
+      letter-spacing: 0.15em;
+      margin: 0.5em 0;
+    }
+    .caratula .subtitulo { font-size: 14pt; color: #333; margin: 1em 0 2em; }
+    .caratula .dato { font-size: 12pt; margin: 0.6em 0; text-align: left; max-width: 14cm; margin-left: auto; margin-right: auto; }
+    .caratula .dato strong { display: inline-block; min-width: 180px; }
+    h2 {
+      font-size: 14pt;
+      color: #004488;
+      border-bottom: 2px solid #0066cc;
+      padding-bottom: 4px;
+      margin-top: 1.8em;
+      page-break-after: avoid;
+    }
+    h3 { font-size: 12pt; color: #0066aa; margin-top: 1.2em; }
+    .indice { page-break-after: always; }
+    .indice ol { line-height: 2; }
+    .indice a { color: #0066cc; text-decoration: none; }
+    .captura {
+      margin: 1.2em 0;
+      page-break-inside: avoid;
+    }
+    .captura figcaption {
+      font-size: 10pt;
+      font-weight: 600;
+      color: #004488;
+      margin-bottom: 6px;
+    }
+    .captura img {
+      width: 100%;
+      max-height: 280px;
+      object-fit: contain;
+      border: 1px solid #ccc;
+      background: #f5f8fc;
+      display: block;
+    }
+    .captura .placeholder {
+      min-height: 160px;
+      border: 2px dashed #99b3cc;
+      background: #f0f6fc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 1.5em;
+      font-size: 10pt;
+      color: #5a6a7a;
+    }
+    table { width: 100%; border-collapse: collapse; margin: 1em 0; font-size: 10pt; }
+    th, td { border: 1px solid #bbb; padding: 8px; vertical-align: top; }
+    th { background: #e8f0fa; }
+    code, pre {
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 9pt;
+      background: #f4f6f8;
+    }
+    pre {
+      padding: 10px;
+      border-left: 4px solid #0066cc;
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+    ul.check { list-style: none; padding-left: 0; }
+    ul.check li::before { content: "✓ "; color: #06a06a; font-weight: bold; }
+    .requisito-ok { color: #0a6644; font-weight: 600; }
+    .page-break { page-break-before: always; }
+    .pie { font-size: 9pt; color: #666; text-align: center; margin-top: 3em; border-top: 1px solid #ddd; padding-top: 1em; }
+    @media print {
+      body { padding: 0; }
+      .no-print { display: none; }
+      a { color: inherit; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- 1. CARÁTULA DEL GRUPO                                      -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <section class="caratula" id="caratula">
+    <p style="font-size:11pt; color:#555;">Universidad / Instituto — Aplicaciones y Programación Web</p>
+    <h1>ÓRBITA</h1>
+    <p class="subtitulo">Centro de misiones — Lista de tareas interactiva</p>
+    <p style="font-size:12pt;"><strong>PROYECTO GRUPAL — FASE 1</strong></p>
+
+    <div style="margin-top:2.5em; text-align:left; display:inline-block;">
+      <p class="dato"><strong>Integrantes:</strong></p>
+      <p class="dato">1. [Nombre completo integrante 1]</p>
+      <p class="dato">2. [Nombre completo integrante 2]</p>
+      <p class="dato">3. [Nombre completo integrante 3]</p>
+      <p class="dato">4. [Nombre completo integrante 4] <em>(opcional)</em></p>
+      <p class="dato">5. [Nombre completo integrante 5] <em>(opcional)</em></p>
+      <p class="dato" style="margin-top:1.5em;"><strong>Grupo No.:</strong> [Ej. 05]</p>
+      <p class="dato"><strong>Semestre:</strong> [Ej. II Semestre 2026]</p>
+      <p class="dato"><strong>Docente:</strong> [Nombre de la docente]</p>
+      <p class="dato"><strong>Fecha de entrega:</strong> [Día / mes / año]</p>
+      <p class="dato"><strong>Asignatura:</strong> Aplicaciones y Programación Web</p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- 2. ÍNDICE DE CONTENIDOS                                    -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <section class="indice" id="indice">
+    <h2>Índice de contenidos</h2>
+    <ol>
+      <li><a href="#caratula">Carátula del grupo</a></li>
+      <li><a href="#indice">Índice de contenidos</a></li>
+      <li><a href="#introduccion">Introducción</a></li>
+      <li><a href="#capturas">Capturas de pantalla del desarrollo</a>
+        <ol style="list-style-type: lower-alpha;">
+          <li>Estructura de carpetas y archivos</li>
+          <li>Creación y estructura HTML</li>
+          <li>Formularios y validación</li>
+          <li>Interfaz en funcionamiento</li>
+          <li>Código CSS y JavaScript</li>
+        </ol>
+      </li>
+      <li><a href="#tecnica">Descripción técnica</a></li>
+      <li><a href="#conclusion">Conclusión grupal</a></li>
+      <li>Anexo: Fichas individuales (archivos separados por integrante)</li>
+    </ol>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- 3. INTRODUCCIÓN                                            -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <section id="introduccion">
+    <h2>3. Introducción</h2>
+
+    <h3>3.1 Propósito del proyecto</h3>
+    <p>
+      El presente proyecto tiene como propósito desarrollar una <strong>aplicación web funcional</strong>
+      que integre los conocimientos adquiridos en el curso de <em>Aplicaciones y Programación Web</em>:
+      HTML5 semántico, hojas de estilo CSS, programación en JavaScript y almacenamiento local en el navegador.
+    </p>
+    <p>
+      Se eligió la temática <strong>lista de tareas</strong>, implementada bajo la identidad visual
+      <strong>ÓRBITA — Centro de misiones</strong>, un enfoque original que presenta cada tarea como una
+      “misión” en órbita, con prioridades, categorías, fechas límite y un archivo de misiones completadas.
+    </p>
+
+    <h3>3.2 ¿Qué contiene el sitio web?</h3>
+    <p>El sitio web es una aplicación de una sola página (<em>single page</em>) organizada en cinco secciones accesibles desde el menú de navegación:</p>
+    <ul>
+      <li><strong>Inicio:</strong> presentación del sistema, estadísticas de misiones y panel radar decorativo.</li>
+      <li><strong>Nueva misión:</strong> formulario para registrar tareas con validación de campos.</li>
+      <li><strong>Panel activo:</strong> listado de tareas pendientes, filtro por categoría y opción de resaltar urgentes.</li>
+      <li><strong>Archivo estelar:</strong> tareas completadas, con sección que se puede mostrar u ocultar.</li>
+      <li><strong>Acerca de:</strong> información del proyecto y créditos técnicos.</li>
+    </ul>
+    <p>
+      Los datos persisten en el navegador mediante <code>localStorage</code>, de modo que las misiones
+      registradas permanecen disponibles al recargar la página. El usuario puede alternar entre tema
+      visual noche (espacial) y día.
+    </p>
+
+    <h3>3.3 Público objetivo</h3>
+    <p>
+      Estudiantes, profesionales o cualquier persona que necesite organizar actividades diarias
+      de forma sencilla, con una interfaz clara y moderna accesible desde cualquier navegador actual.
+    </p>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- 4. CAPTURAS DE PANTALLA (mínimo 10)                        -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <section id="capturas" class="page-break">
+    <h2>4. Capturas de pantalla del desarrollo</h2>
+    <p class="no-print" style="background:#fff3cd; padding:10px; border-radius:6px; font-size:10pt;">
+      <strong>Importante:</strong> Guarde sus capturas en <code>documentacion/capturas/</code> con los nombres indicados.
+      Cuando existan las imágenes, reemplace el recuadro punteado automáticamente (si el archivo existe se mostrará la imagen).
+    </p>
+
+    <figure class="captura" id="cap01">
+      <figcaption>Captura 1 — Estructura de carpetas del proyecto</figcaption>
+      <img src="capturas/01_estructura_carpetas.png" alt="Captura 1"
+           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="placeholder" style="display:none;">
+        Insertar: explorador de archivos mostrando WEB/, css/, js/, documentacion/
+      </div>
+    </figure>
+
+    <figure class="captura" id="cap02">
+      <figcaption>Captura 2 — Edición del archivo index.html (creación HTML)</figcaption>
+      <img src="capturas/02_editor_index_html.png" alt="Captura 2"
+           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="placeholder" style="display:none;">
+        Insertar: editor con index.html abierto (etiquetas semánticas, menú, secciones)
+      </div>
+    </figure>
+
+    <figure class="captura" id="cap03">
+      <figcaption>Captura 3 — Página principal / sección Inicio</figcaption>
+      <img src="capturas/03_pagina_inicio.png" alt="Captura 3"
+           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="placeholder" style="display:none;">
+        Insertar: navegador en #inicio con estadísticas y radar
+      </div>
+    </figure>
+
+    <figure class="captura" id="cap04">
+      <figcaption>Captura 4 — Menú de navegación y diseño semántico</figcaption>
+      <img src="capturas/04_menu_navegacion.jpg" alt="Captura 4"
+           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="placeholder" style="display:none;">
+        Insertar: barra de navegación con los 5 enlaces visibles
+      </div>
+    </figure>
+
+    <figure class="captura" id="cap05">
+      <figcaption>Captura 5 — Formulario de nueva misión (estado inicial)</figcaption>
+      <img src="capturas/05_formulario_vacio.png" alt="Captura 5"
+           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="placeholder" style="display:none;">
+        Insertar: sección Nueva misión con campos vacíos
+      </div>
+    </figure>
+
+    <figure class="captura" id="cap06">
+      <figcaption>Captura 6 — Validación del formulario (mensajes de error)</figcaption>
+      <img src="capturas/06_formulario_errores.png" alt="Captura 6"
+           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="placeholder" style="display:none;">
+        Insertar: formulario con errores visibles (campos obligatorios, fecha inválida, etc.)
+      </div>
+    </figure>
+
+    <figure class="captura" id="cap07">
+      <figcaption>Captura 7 — Misión registrada correctamente (toast de éxito)</figcaption>
+      <img src="capturas/07_mision_lanzada.png" alt="Captura 7"
+           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="placeholder" style="display:none;">
+        Insertar: mensaje de confirmación tras enviar el formulario
+      </div>
+    </figure>
+
+    <figure class="captura" id="cap08">
+      <figcaption>Captura 8 — Panel de misiones activas con tarjetas</figcaption>
+      <img src="capturas/08_panel_misiones.png" alt="Captura 8"
+           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="placeholder" style="display:none;">
+        Insertar: lista de tareas con prioridades, filtro y botones completar/eliminar
+      </div>
+    </figure>
+
+    <figure class="captura" id="cap09">
+      <figcaption>Captura 9 — Archivo estelar (tareas completadas, mostrar/ocultar)</figcaption>
+      <img src="capturas/09_archivo_estelar.png" alt="Captura 9"
+           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="placeholder" style="display:none;">
+        Insertar: sección archivo expandida con tareas tachadas
+      </div>
+    </figure>
+
+    <figure class="captura" id="cap10">
+      <figcaption>Captura 10 — Cambio de estilos (modo día / resaltar urgentes)</figcaption>
+      <img src="capturas/10_modo_dia.png" alt="Captura 10"
+           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="placeholder" style="display:none;">
+        Insertar: interfaz en modo día o misiones resaltadas en rojo
+      </div>
+    </figure>
+
+    <figure class="captura" id="cap11">
+      <figcaption>Captura 11 — Código JavaScript (app.js)</figcaption>
+      <img src="capturas/11_codigo_javascript.png" alt="Captura 11"
+           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="placeholder" style="display:none;">
+        Insertar: editor con funciones de validación, localStorage o renderizado
+      </div>
+    </figure>
+
+    <figure class="captura" id="cap12">
+      <figcaption>Captura 12 — Código CSS (styles.css)</figcaption>
+      <img src="capturas/12_codigo_css.png" alt="Captura 12"
+           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="placeholder" style="display:none;">
+        Insertar: editor con variables CSS, estilos de tarjetas o animaciones
+      </div>
+    </figure>
+
+    <h3>4.1 Fragmentos de código de referencia (complemento a capturas)</h3>
+    <p>Estructura semántica del encabezado y navegación en <code>index.html</code>:</p>
+    <pre>&lt;header class="site-header"&gt; ... &lt;/header&gt;
+&lt;nav class="nav-principal" aria-label="Navegación principal"&gt;
+  &lt;ul&gt;
+    &lt;li&gt;&lt;a href="#inicio"&gt;Inicio&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="#nueva-mision"&gt;Nueva misión&lt;/a&gt;&lt;/li&gt;
+    ...
+  &lt;/ul&gt;
+&lt;/nav&gt;
+&lt;main class="contenedor-principal"&gt; ... &lt;/main&gt;</pre>
+
+    <p>Validación personalizada en <code>js/app.js</code>:</p>
+    <pre>function validarCampoFecha(valor) {
+  if (!valor) return "La fecha límite es obligatoria.";
+  const seleccionada = new Date(valor + "T00:00:00");
+  const hoy = new Date();
+  hoy.setHours(0, 0, 0, 0);
+  if (seleccionada &lt; hoy) {
+    return "La fecha no puede ser anterior a hoy.";
+  }
+  return "";
+}</pre>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- 5. DESCRIPCIÓN TÉCNICA                                       -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <section id="tecnica" class="page-break">
+    <h2>5. Descripción técnica</h2>
+
+    <h3>5.1 Archivos creados</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Archivo / carpeta</th>
+          <th>Tipo</th>
+          <th>Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>index.html</code></td>
+          <td>HTML5</td>
+          <td>Página principal: estructura semántica, menú, 5 secciones, formulario y enlaces a CSS/JS.</td>
+        </tr>
+        <tr>
+          <td><code>css/styles.css</code></td>
+          <td>CSS3</td>
+          <td>Estilos externos: variables, tema noche/día, layout, tarjetas, animaciones, responsive.</td>
+        </tr>
+        <tr>
+          <td><code>js/app.js</code></td>
+          <td>JavaScript</td>
+          <td>Lógica de la aplicación: validación, CRUD de misiones, eventos, localStorage.</td>
+        </tr>
+        <tr>
+          <td><code>documentacion/</code></td>
+          <td>Informe</td>
+          <td>Carpeta de entrega documental (este archivo, fichas, capturas).</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>5.2 Estructura de carpetas</h3>
+    <pre>WEB/
+├── index.html
+├── css/
+│   └── styles.css
+├── js/
+│   └── app.js
+└── documentacion/
+    ├── Documentacion_Completa_ORBITA.html
+    ├── Ficha_Individual_PLANTILLA.html
+    ├── INSTRUCCIONES_ENTREGA.txt
+    └── capturas/
+        └── (imágenes .png)</pre>
+
+    <h3>5.3 Cumplimiento de requisitos del proyecto</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Requisito (Fase 1)</th>
+          <th>Cómo se cumple en ÓRBITA</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>HTML5 semántico + menú</td>
+          <td><span class="requisito-ok">Cumplido</span> — <code>header</code>, <code>nav</code>, <code>main</code>, <code>section</code>, <code>article</code>, <code>aside</code>, <code>footer</code>; menú sticky con 5 enlaces.</td>
+        </tr>
+        <tr>
+          <td>Mínimo 3 secciones</td>
+          <td><span class="requisito-ok">Cumplido</span> — 5 secciones con contenido distribuido.</td>
+        </tr>
+        <tr>
+          <td>Formulario con validación</td>
+          <td><span class="requisito-ok">Cumplido</span> — Formulario “Nueva misión”; validación HTML5 + JavaScript en blur y submit.</td>
+        </tr>
+        <tr>
+          <td>CSS (colores, márgenes, tipografía)</td>
+          <td><span class="requisito-ok">Cumplido</span> — Hoja externa, variables CSS, fuentes Google Fonts, diseño responsive.</td>
+        </tr>
+        <tr>
+          <td>Mostrar / ocultar elementos</td>
+          <td><span class="requisito-ok">Cumplido</span> — Archivo estelar, mensaje de bienvenida, créditos del sistema.</td>
+        </tr>
+        <tr>
+          <td>Eventos con botones</td>
+          <td><span class="requisito-ok">Cumplido</span> — Tema día/noche, transmitir mensaje, resaltar urgentes, completar/eliminar misiones.</td>
+        </tr>
+        <tr>
+          <td>Validación de formularios (JS)</td>
+          <td><span class="requisito-ok">Cumplido</span> — <code>validarCampoTitulo</code>, <code>validarCampoFecha</code>, <code>validarFormularioCompleto</code>.</td>
+        </tr>
+        <tr>
+          <td>Funciones personalizadas</td>
+          <td><span class="requisito-ok">Cumplido</span> — <code>generarId</code>, <code>formatearFecha</code>, <code>estaVencida</code>, <code>alternarVisibilidad</code>, <code>mostrarToast</code>, etc.</td>
+        </tr>
+        <tr>
+          <td>Almacenamiento en navegador</td>
+          <td><span class="requisito-ok">Cumplido</span> — <code>localStorage</code> para misiones y preferencia de tema.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>5.4 Funcionalidades implementadas</h3>
+    <ul class="check">
+      <li>Registro de misiones (título, descripción, prioridad, fecha límite, categoría).</li>
+      <li>Listado de misiones activas con tarjetas codificadas por color de prioridad.</li>
+      <li>Completar misión → pasa al archivo estelar; eliminar misión con confirmación.</li>
+      <li>Filtro por categoría: estudio, trabajo, personal, salud.</li>
+      <li>Detección de misiones vencidas y resaltado de urgentes.</li>
+      <li>Estadísticas en tiempo real: total, en órbita, completadas.</li>
+      <li>Alternancia de tema visual noche / día persistente.</li>
+      <li>Mensajes toast de éxito y error al interactuar con el formulario.</li>
+      <li>Navegación suave entre secciones y marcado del enlace activo al hacer scroll.</li>
+      <li>Vaciar archivo de misiones completadas.</li>
+    </ul>
+
+    <h3>5.5 Tecnologías utilizadas</h3>
+    <ul>
+      <li><strong>HTML5</strong> — Estructura y accesibilidad básica (<code>aria-label</code>, <code>role</code>).</li>
+      <li><strong>CSS3</strong> — Flexbox, Grid, variables custom, animaciones, media queries.</li>
+      <li><strong>JavaScript (ES6+)</strong> — Módulo IIFE, funciones flecha, template literals, DOM API.</li>
+      <li><strong>localStorage API</strong> — Persistencia de datos sin servidor.</li>
+      <li><strong>Google Fonts</strong> — Orbitron y Exo 2 (tipografía del tema espacial).</li>
+    </ul>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- 6. CONCLUSIÓN GRUPAL                                         -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <section id="conclusion" class="page-break">
+    <h2>6. Conclusión grupal</h2>
+    <p>
+      La elaboración del proyecto <strong>ÓRBITA</strong> permitió al grupo aplicar de manera integrada
+      las tecnologías fundamentales del desarrollo web front-end. Se logró una aplicación
+      <strong>funcional, organizada y visualmente coherente</strong>, que va más allá de una lista de
+      tareas convencional al incorporar una metáfora de “misiones espaciales” sin sacrificar la usabilidad.
+    </p>
+    <p>
+      Desde el punto de vista técnico, se reforzaron competencias en <strong>maquetación semántica</strong>,
+      <strong>diseño responsive con CSS</strong> y <strong>programación orientada a eventos</strong> en JavaScript,
+      incluyendo validación de datos, manipulación del DOM y almacenamiento local. La división por archivos
+      (<code>index.html</code>, <code>styles.css</code>, <code>app.js</code>) facilitó el trabajo colaborativo
+      y la preparación de la exposición individual por secciones.
+    </p>
+    <p>
+      Como aspectos de mejora futura, el grupo identifica la posibilidad de añadir edición de misiones
+      en línea, sincronización en la nube, notificaciones de fechas límite y mayor cobertura de pruebas
+      de accesibilidad (WCAG).
+    </p>
+    <p>
+      En conjunto, se considera que el entregable cumple los requisitos de la <strong>Fase 1</strong>
+      del proyecto grupal y constituye una base sólida para ampliaciones en fases posteriores del curso.
+    </p>
+
+    <p style="margin-top:2em;"><strong>Firmas del grupo (opcional en versión impresa):</strong></p>
+    <table>
+      <tr><th>Integrante</th><th>Firma</th></tr>
+      <tr><td>[Nombre 1]</td><td>_________________________</td></tr>
+      <tr><td>[Nombre 2]</td><td>_________________________</td></tr>
+      <tr><td>[Nombre 3]</td><td>_________________________</td></tr>
+    </table>
+  </section>
+
+  <section id="anexo-fichas">
+    <h2>7. Anexo — Fichas individuales</h2>
+    <p>
+      Cada integrante debe entregar <strong>una ficha individual</strong> (una página por persona),
+      usando el archivo <code>Ficha_Individual_PLANTILLA.html</code> incluido en esta carpeta.
+      Duplique la plantilla, complete sus datos y expórtela a PDF junto con este documento.
+    </p>
+    <p>Distribución sugerida para la exposición individual:</p>
+    <table>
+      <thead>
+        <tr><th>Integrante (ejemplo)</th><th>Sección a explicar</th><th>Archivo principal</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Integrante 1</td><td>HTML — estructura y formulario</td><td>index.html</td></tr>
+        <tr><td>Integrante 2</td><td>CSS — diseño y temas</td><td>css/styles.css</td></tr>
+        <tr><td>Integrante 3</td><td>JavaScript — validación y lógica</td><td>js/app.js</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <p class="pie">
+    Documentación generada para el Proyecto Grupal ÓRBITA — Aplicaciones y Programación Web — Fase 1<br>
+    Para exportar a PDF: Ctrl + P → Guardar como PDF (recomendado: Google Chrome o Microsoft Edge).
+  </p>
+
+  <script>
+    /* Muestra placeholder si la imagen no existe */
+    document.querySelectorAll(".captura img").forEach(function (img) {
+      img.addEventListener("error", function () {
+        var ph = img.nextElementSibling;
+        if (ph && ph.classList.contains("placeholder")) {
+          img.style.display = "none";
+          ph.style.display = "flex";
+        }
+      });
+      if (!img.complete || img.naturalHeight === 0) {
+        if (img.complete) img.dispatchEvent(new Event("error"));
+      }
+    });
+  </script>
+</body>
+</html>

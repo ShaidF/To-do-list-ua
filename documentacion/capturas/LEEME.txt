@@ -1,0 +1,15 @@
+Coloca aquí tus capturas de pantalla (mínimo 10).
+
+Nombres recomendados:
+01_estructura_carpetas.png
+02_editor_index_html.png
+03_pagina_inicio.png
+04_menu_navegacion.png
+05_formulario_vacio.png
+06_formulario_errores.png
+07_archivo_estelar.png
+08_codigo_javascript.png
+09_codigo_css.png
+
+Cuando las guardes, actualiza las rutas en Documentacion_Completa_ORBITA.html
+o insértalas manualmente al imprimir a PDF desde Word.

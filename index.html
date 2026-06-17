@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ÓRBITA — Centro de misiones para organizar tus tareas diarias">
+  <title>ÓRBITA | Centro de Misiones</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#00d4ff">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/features.css">
+</head>
+<body>
+  <canvas id="fx-canvas" class="fx-canvas" aria-hidden="true"></canvas>
+  <div class="starfield" id="starfield" aria-hidden="true"></div>
+  <div id="cohete-lanzamiento" class="cohete-lanzamiento oculto" aria-hidden="true">🚀</div>
+
+  <header class="site-header">
+    <div class="header-brand">
+      <span class="logo-ring" aria-hidden="true"></span>
+      <h1>ÓRBITA</h1>
+      <p class="tagline">Centro de misiones personales</p>
+    </div>
+    <div class="header-extra">
+      <div class="racha-badge" id="racha-badge" title="Racha de días completando misiones">🔥 0 días</div>
+      <label class="accent-picker" title="Color de acento">
+        <span class="sr-only">Color acento</span>
+        <input type="color" id="accent-color" value="#00d4ff">
+      </label>
+      <div class="reloj-mision" id="reloj-mision" aria-live="off">00:00:00</div>
+      <button type="button" id="btn-tema" class="btn-tema" aria-label="Cambiar tema visual">
+        <span class="btn-tema-icon">◐</span>
+        <span class="btn-tema-texto">Modo día</span>
+      </button>
+    </div>
+  </header>
+
+  <nav class="nav-principal" aria-label="Navegación principal">
+    <ul>
+      <li><a href="#inicio" class="nav-link activo">Inicio</a></li>
+      <li><a href="#nueva-mision" class="nav-link">Nueva misión</a></li>
+      <li><a href="#panel-misiones" class="nav-link">Panel activo</a></li>
+      <li><a href="#calendario" class="nav-link">Calendario</a></li>
+      <li><a href="#herramientas" class="nav-link">Herramientas</a></li>
+      <li><a href="#archivo" class="nav-link">Archivo estelar</a></li>
+      <li><a href="#acerca" class="nav-link">Acerca de</a></li>
+    </ul>
+  </nav>
+
+  <main class="contenedor-principal">
+    <!-- SECCIÓN 1: INICIO -->
+    <section id="inicio" class="seccion seccion-hero" aria-labelledby="titulo-inicio">
+      <article class="hero-card">
+        <p class="hero-badge">◆ SISTEMA EN LÍNEA</p>
+        <h2 id="titulo-inicio"><span id="titulo-typed"></span><span class="cursor-blink">|</span></h2>
+        <p>
+          Cada tarea es una <strong>misión</strong> en órbita. Regístrala, asigna prioridad
+          y despega cuando estés listo. Las completadas van al archivo estelar.
+        </p>
+
+        <div class="progreso-orbital" aria-label="Progreso de misiones completadas">
+          <svg class="ring-svg" viewBox="0 0 120 120" aria-hidden="true">
+            <circle class="ring-bg" cx="60" cy="60" r="52"/>
+            <circle class="ring-fill" id="ring-fill" cx="60" cy="60" r="52"/>
+          </svg>
+          <div class="ring-texto">
+            <span class="ring-pct" id="ring-pct">0%</span>
+            <span class="ring-label">Misiones logradas</span>
+          </div>
+        </div>
+
+        <div class="hero-stats" id="hero-stats">
+          <div class="stat-orbe">
+            <span class="stat-num" id="stat-total">0</span>
+            <span class="stat-label">Misiones</span>
+          </div>
+          <div class="stat-orbe">
+            <span class="stat-num" id="stat-activas">0</span>
+            <span class="stat-label">En órbita</span>
+          </div>
+          <div class="stat-orbe">
+            <span class="stat-num" id="stat-completadas">0</span>
+            <span class="stat-label">Completadas</span>
+          </div>
+        </div>
+        <button type="button" id="btn-mostrar-bienvenida" class="btn-primario">
+          Transmitir mensaje de control
+        </button>
+        <p id="mensaje-bienvenida" class="mensaje-flotante oculto" role="status" aria-live="polite"></p>
+
+        <div class="stats-categorias" id="stats-categorias" aria-label="Estadísticas por categoría"></div>
+      </article>
+      <aside class="mapa-orbital-panel" aria-label="Mapa orbital de misiones activas">
+        <canvas id="mapa-orbital" width="280" height="280" aria-hidden="true"></canvas>
+        <p class="mapa-leyenda">Mapa en vivo — cada punto es una misión activa</p>
+        <p class="mapa-contador" id="mapa-contador">0 objetos en órbita</p>
+      </aside>
+    </section>
+
+    <!-- SECCIÓN 2: FORMULARIO NUEVA MISIÓN -->
+    <section id="nueva-mision" class="seccion seccion-formulario" aria-labelledby="titulo-formulario">
+      <h2 id="titulo-formulario">Registrar nueva misión</h2>
+      <p class="seccion-desc">Completa el manifiesto de lanzamiento. Los campos marcados son obligatorios.</p>
+
+      <form id="form-mision" class="form-mision" novalidate>
+        <div class="campo-grupo">
+          <label for="titulo-mision">Nombre de la misión</label>
+          <input
+            type="text"
+            id="titulo-mision"
+            name="titulo"
+            placeholder="Ej: Entregar informe del proyecto"
+            minlength="3"
+            maxlength="80"
+            required
+            autocomplete="off"
+          >
+          <span class="error-campo" id="error-titulo" role="alert"></span>
+        </div>
+
+        <div class="campo-grupo">
+          <label for="descripcion-mision">Descripción (opcional)</label>
+          <textarea
+            id="descripcion-mision"
+            name="descripcion"
+            rows="3"
+            placeholder="Detalles de la misión..."
+            maxlength="200"
+          ></textarea>
+        </div>
+
+        <div class="campo-fila">
+        <div class="campo-grupo">
+          <label>Prioridad orbital</label>
+          <div class="prioridad-chips" role="group" aria-label="Seleccionar prioridad">
+            <button type="button" class="chip-prioridad" data-prioridad="baja">Exterior</button>
+            <button type="button" class="chip-prioridad" data-prioridad="media">Media</button>
+            <button type="button" class="chip-prioridad" data-prioridad="alta">Crítica</button>
+          </div>
+          <select id="prioridad-mision" name="prioridad" required class="select-oculto-visual">
+            <option value="">— Seleccionar —</option>
+            <option value="baja">Baja — órbita exterior</option>
+            <option value="media">Media — órbita media</option>
+            <option value="alta">Alta — órbita crítica</option>
+          </select>
+          <span class="error-campo" id="error-prioridad" role="alert"></span>
+        </div>
+
+          <div class="campo-grupo">
+            <label for="fecha-mision">Fecha límite</label>
+            <input type="date" id="fecha-mision" name="fecha" required>
+            <span class="error-campo" id="error-fecha" role="alert"></span>
+          </div>
+        </div>
+
+        <div class="campo-grupo">
+          <label for="etiquetas-mision">Etiquetas (separadas por coma)</label>
+          <input type="text" id="etiquetas-mision" placeholder="#examen, #urgente" autocomplete="off">
+        </div>
+
+        <div class="campo-grupo">
+          <label for="subtareas-mision">Sub-tareas (una por línea)</label>
+          <textarea id="subtareas-mision" rows="2" placeholder="Investigar tema&#10;Redactar borrador"></textarea>
+        </div>
+
+        <div class="campo-grupo">
+          <label for="categoria-mision">Sector galáctico</label>
+          <select id="categoria-mision" name="categoria" required>
+            <option value="">— Seleccionar —</option>
+            <option value="estudio">Estudio</option>
+            <option value="trabajo">Trabajo</option>
+            <option value="personal">Personal</option>
+            <option value="salud">Salud</option>
+          </select>
+          <span class="error-campo" id="error-categoria" role="alert"></span>
+        </div>
+
+        <div class="form-acciones">
+          <button type="submit" class="btn-primario btn-lanzar">
+            <span aria-hidden="true">🚀</span> Lanzar misión
+          </button>
+          <button type="reset" class="btn-secundario" id="btn-limpiar-form">Limpiar manifiesto</button>
+        </div>
+      </form>
+
+      <div id="toast-formulario" class="toast oculto" role="alert"></div>
+    </section>
+
+    <!-- SECCIÓN 3: PANEL DE MISIONES ACTIVAS -->
+    <section id="panel-misiones" class="seccion seccion-panel" aria-labelledby="titulo-panel">
+      <div class="panel-cabecera">
+        <h2 id="titulo-panel">Panel de misiones activas</h2>
+        <div class="panel-controles">
+          <input type="search" id="buscar-mision" class="input-buscar" placeholder="🔍 Buscar misión..." autocomplete="off">
+          <label for="filtro-categoria" class="sr-only">Filtrar por categoría</label>
+          <select id="filtro-categoria" class="select-filtro">
+            <option value="todas">Todas las categorías</option>
+            <option value="estudio">Estudio</option>
+            <option value="trabajo">Trabajo</option>
+            <option value="personal">Personal</option>
+            <option value="salud">Salud</option>
+          </select>
+          <select id="orden-misiones" class="select-filtro" aria-label="Ordenar misiones">
+            <option value="reciente">Más recientes</option>
+            <option value="fecha-asc">Fecha límite ↑</option>
+            <option value="fecha-desc">Fecha límite ↓</option>
+            <option value="prioridad">Prioridad</option>
+            <option value="nombre">Nombre A-Z</option>
+            <option value="manual">Orden manual</option>
+          </select>
+          <button type="button" id="btn-toggle-estilos" class="btn-secundario">
+            Resaltar urgentes
+          </button>
+          <button type="button" id="btn-solo-hoy" class="btn-secundario">Solo hoy</button>
+          <button type="button" id="btn-undo" class="btn-secundario oculto" title="Deshacer eliminación">↩ Deshacer</button>
+          <button type="button" id="btn-focus-mode" class="btn-secundario">Modo foco</button>
+        </div>
+      </div>
+      <p class="panel-hint">Arrastra las tarjetas ⋮⋮ para reordenar · Clic para detalle · Atajos: N nueva, / buscar, F foco</p>
+
+      <p id="panel-vacio" class="estado-vacio">
+        No hay misiones en órbita. Registra la primera en <a href="#nueva-mision">Nueva misión</a>.
+      </p>
+      <ul id="lista-activas" class="lista-misiones" aria-label="Lista de tareas activas"></ul>
+    </section>
+
+    <!-- SECCIÓN: CALENDARIO -->
+    <section id="calendario" class="seccion seccion-calendario" aria-labelledby="titulo-calendario">
+      <h2 id="titulo-calendario">Calendario de misiones</h2>
+      <div class="cal-nav">
+        <button type="button" id="cal-prev" class="btn-secundario">◀</button>
+        <span id="cal-mes-label" class="cal-mes-label"></span>
+        <button type="button" id="cal-next" class="btn-secundario">▶</button>
+      </div>
+      <div id="calendario-grid" class="calendario-grid" aria-label="Calendario mensual"></div>
+      <p id="cal-detalle" class="cal-detalle"></p>
+    </section>
+
+    <!-- SECCIÓN: HERRAMIENTAS -->
+    <section id="herramientas" class="seccion seccion-herramientas" aria-labelledby="titulo-herramientas">
+      <h2 id="titulo-herramientas">Centro de herramientas</h2>
+      <div class="herramientas-grid">
+        <article class="tool-card">
+          <h3>Respaldo de datos</h3>
+          <p>Exporta o importa tus misiones en JSON.</p>
+          <div class="tool-acciones">
+            <button type="button" id="btn-exportar" class="btn-primario">Exportar JSON</button>
+            <label class="btn-secundario btn-archivo">
+              Importar JSON
+              <input type="file" id="input-importar" accept=".json,application/json" hidden>
+            </label>
+          </div>
+        </article>
+        <article class="tool-card">
+          <h3>API de demostración</h3>
+          <p>Carga misiones de ejemplo desde el servidor local (fetch).</p>
+          <button type="button" id="btn-cargar-api" class="btn-secundario">Cargar desde API mock</button>
+        </article>
+        <article class="tool-card">
+          <h3>Notificaciones</h3>
+          <p>Aviso cuando una misión vence hoy.</p>
+          <button type="button" id="btn-notificaciones" class="btn-secundario">Activar notificaciones</button>
+        </article>
+        <article class="tool-card">
+          <h3>Compartir lista</h3>
+          <p>Copia un resumen al portapapeles.</p>
+          <button type="button" id="btn-compartir" class="btn-secundario">Copiar resumen</button>
+        </article>
+        <article class="tool-card">
+          <h3>Sonido y vibración</h3>
+          <label class="toggle-label"><input type="checkbox" id="toggle-sonido" checked> Efectos de sonido</label>
+        </article>
+        <article class="tool-card">
+          <h3>Instalar app (PWA)</h3>
+          <p>Funciona sin conexión tras la primera visita.</p>
+          <button type="button" id="btn-instalar-pwa" class="btn-secundario">Instalar ÓRBITA</button>
+        </article>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 4: ARCHIVO ESTELAR (completadas) -->
+    <section id="archivo" class="seccion seccion-archivo" aria-labelledby="titulo-archivo">
+      <div class="archivo-cabecera">
+        <h2 id="titulo-archivo">Archivo estelar</h2>
+        <button type="button" id="btn-toggle-archivo" class="btn-secundario" aria-expanded="false" aria-controls="contenido-archivo">
+          Mostrar completadas
+        </button>
+      </div>
+      <div id="contenido-archivo" class="contenido-archivo oculto" aria-hidden="true">
+        <p class="seccion-desc">Misiones que ya aterrizaron con éxito.</p>
+        <button type="button" id="btn-borrar-archivo" class="btn-peligro">
+          Vaciar archivo
+        </button>
+        <ul id="lista-completadas" class="lista-misiones lista-archivo" aria-label="Tareas completadas"></ul>
+        <p id="archivo-vacio" class="estado-vacio oculto">El archivo está vacío.</p>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 5: ACERCA DE -->
+    <section id="acerca" class="seccion seccion-acerca" aria-labelledby="titulo-acerca">
+      <h2 id="titulo-acerca">Acerca del proyecto</h2>
+      <article class="acerca-card">
+        <h3>ÓRBITA — Lista de tareas</h3>
+        <p>
+          Aplicación web desarrollada para el curso de <strong>Aplicaciones y Programación Web</strong>.
+          Integra HTML5 semántico, CSS con diseño espacial y JavaScript para gestión interactiva
+          de tareas con almacenamiento local en el navegador.
+        </p>
+        <ul class="lista-tecnica">
+          <li>Estructura HTML5 con navegación y 5 secciones</li>
+          <li>Formulario con validación en tiempo real</li>
+          <li>Mapa orbital animado y sistema de partículas</li>
+          <li>Modal de detalle, búsqueda, orden y cuenta regresiva</li>
+          <li>Logros desbloqueables y efectos al completar misiones</li>
+          <li>Persistencia con <code>localStorage</code></li>
+        </ul>
+        <div id="logros-panel" class="logros-panel" aria-label="Logros desbloqueados"></div>
+        <button type="button" id="btn-mostrar-creditos" class="btn-secundario">
+          Ver créditos del sistema
+        </button>
+        <p id="creditos-sistema" class="mensaje-flotante oculto" role="status"></p>
+      </article>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Proyecto Grupal — Fase 1 · Aplicaciones Web · <span id="anio-footer"></span></p>
+  </footer>
+
+  <div id="modal-mision" class="modal-overlay oculto" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
+    <div class="modal-contenido modal-contenido-grande">
+      <button type="button" class="modal-cerrar" id="modal-cerrar" aria-label="Cerrar">✕</button>
+      <h3 id="modal-titulo">Detalle de misión</h3>
+      <div id="modal-modo-tabs" class="modal-tabs">
+        <button type="button" class="modal-tab activo" data-modo="ver">Ver</button>
+        <button type="button" class="modal-tab" data-modo="editar">Editar</button>
+      </div>
+      <div id="modal-cuerpo"></div>
+      <div id="modal-editar" class="modal-editar oculto"></div>
+      <div class="modal-acciones">
+        <button type="button" class="btn-primario" id="modal-completar">Completar misión</button>
+        <button type="button" class="btn-secundario oculto" id="modal-guardar">Guardar cambios</button>
+        <button type="button" class="btn-peligro" id="modal-eliminar">Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="focus-overlay" class="focus-overlay oculto" aria-hidden="true">
+    <div class="focus-inner">
+      <button type="button" id="focus-cerrar" class="btn-secundario">Salir del modo foco</button>
+      <p class="focus-label">Misión en concentración</p>
+      <h2 id="focus-titulo"></h2>
+      <p id="focus-desc"></p>
+      <ul id="focus-subtareas" class="focus-subtareas"></ul>
+      <button type="button" id="focus-completar" class="btn-primario">Completar ahora</button>
+    </div>
+  </div>
+
+  <aside id="pomodoro-widget" class="pomodoro-widget" aria-label="Temporizador Pomodoro">
+    <button type="button" id="pomo-toggle" class="pomo-toggle" title="Pomodoro">⏱</button>
+    <div id="pomo-panel" class="pomo-panel oculto">
+      <p class="pomo-tiempo" id="pomo-tiempo">25:00</p>
+      <p class="pomo-mision" id="pomo-mision-label">Sin misión vinculada</p>
+      <select id="pomo-select-mision" class="select-filtro"></select>
+      <div class="pomo-btns">
+        <button type="button" id="pomo-start" class="btn-primario">Iniciar</button>
+        <button type="button" id="pomo-reset" class="btn-secundario">Reset</button>
+      </div>
+    </div>
+  </aside>
+
+  <div id="toast-global" class="toast-global oculto" role="status" aria-live="polite"></div>
+  <div id="atajos-ayuda" class="atajos-ayuda oculto" role="complementary"></div>
+
+  <script src="js/effects.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/features.js"></script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+[
+  {
+    "titulo": "Estudiar para examen Web",
+    "descripcion": "Repasar HTML, CSS y JavaScript",
+    "prioridad": "alta",
+    "fecha": "2026-06-10",
+    "categoria": "estudio",
+    "etiquetas": ["#examen", "#urgente"],
+    "subtareas": [
+      { "texto": "Revisar apuntes", "hecha": false },
+      { "texto": "Practicar formularios", "hecha": true }
+    ]
+  },
+  {
+    "titulo": "Entregar documentación del proyecto",
+    "descripcion": "ZIP con código y capturas",
+    "prioridad": "media",
+    "fecha": "2026-06-08",
+    "categoria": "trabajo",
+    "etiquetas": ["#grupo"],
+    "subtareas": []
+  }
+]
