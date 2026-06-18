@@ -3,7 +3,7 @@
     "titulo": "Estudiar para examen Web",
     "descripcion": "Repasar HTML, CSS y JavaScript",
     "prioridad": "alta",
-    "fecha": "2026-06-10",
+    "fecha": "2026-06-25",
     "categoria": "estudio",
     "etiquetas": ["#examen", "#urgente"],
     "subtareas": [
@@ -15,7 +15,7 @@
     "titulo": "Entregar documentación del proyecto",
     "descripcion": "ZIP con código y capturas",
     "prioridad": "media",
-    "fecha": "2026-06-08",
+    "fecha": "2026-06-30",
     "categoria": "trabajo",
     "etiquetas": ["#grupo"],
     "subtareas": []

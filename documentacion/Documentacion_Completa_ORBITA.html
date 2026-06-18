@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Documentación — ÓRBITA | Proyecto Grupal Fase 1</title>
+  <title>Documentación — ÓRBITA | Proyecto Grupal Fase 2</title>
   <style>
     @page { size: A4; margin: 2cm; }
     * { box-sizing: border-box; }
@@ -110,10 +110,12 @@
     <p style="font-size:11pt; color:#555;">Universidad / Instituto — Aplicaciones y Programación Web</p>
     <h1>ÓRBITA</h1>
     <p class="subtitulo">Centro de misiones — Lista de tareas interactiva</p>
-    <p style="font-size:12pt;"><strong>PROYECTO GRUPAL — FASE 1</strong></p>
+    <p style="font-size:12pt;"><strong>PROYECTO GRUPAL — FASE 2</strong></p>
 
     <div style="margin-top:2.5em; text-align:left; display:inline-block;">
-      <p class="dato"><strong>Integrantes:</strong></p>
+      <p class="dato"><strong>Nombre del proyecto:</strong> ÓRBITA — Centro de misiones</p>
+      <p class="dato"><strong>Carrera:</strong> [Ej. Ingeniería en Sistemas / Tecnología Digital / etc.]</p>
+      <p class="dato" style="margin-top:1em;"><strong>Integrantes:</strong></p>
       <p class="dato">1. [Nombre completo integrante 1]</p>
       <p class="dato">2. [Nombre completo integrante 2]</p>
       <p class="dato">3. [Nombre completo integrante 3]</p>
@@ -136,6 +138,7 @@
       <li><a href="#caratula">Carátula del grupo</a></li>
       <li><a href="#indice">Índice de contenidos</a></li>
       <li><a href="#introduccion">Introducción</a></li>
+      <li><a href="#objetivos">Objetivos</a></li>
       <li><a href="#capturas">Capturas de pantalla del desarrollo</a>
         <ol style="list-style-type: lower-alpha;">
           <li>Estructura de carpetas y archivos</li>
@@ -146,7 +149,10 @@
         </ol>
       </li>
       <li><a href="#tecnica">Descripción técnica</a></li>
-      <li><a href="#conclusion">Conclusión grupal</a></li>
+      <li><a href="#url-publicada">URL del proyecto publicado</a></li>
+      <li><a href="#conclusion">Conclusiones</a></li>
+      <li><a href="#exposicion-video">Exposición en video (5 min)</a></li>
+      <li><a href="#checklist">Checklist de entregables</a></li>
       <li>Anexo: Fichas individuales (archivos separados por integrante)</li>
     </ol>
   </section>
@@ -170,13 +176,15 @@
     </p>
 
     <h3>3.2 ¿Qué contiene el sitio web?</h3>
-    <p>El sitio web es una aplicación de una sola página (<em>single page</em>) organizada en cinco secciones accesibles desde el menú de navegación:</p>
+    <p>El sitio web es una aplicación de una sola página (<em>single page</em>) organizada en siete secciones accesibles desde el menú de navegación:</p>
     <ul>
-      <li><strong>Inicio:</strong> presentación del sistema, estadísticas de misiones y panel radar decorativo.</li>
+      <li><strong>Inicio:</strong> presentación del sistema, estadísticas de misiones, mapa orbital y progreso.</li>
       <li><strong>Nueva misión:</strong> formulario para registrar tareas con validación de campos.</li>
-      <li><strong>Panel activo:</strong> listado de tareas pendientes, filtro por categoría y opción de resaltar urgentes.</li>
+      <li><strong>Panel activo:</strong> listado de tareas pendientes, búsqueda, filtros y orden.</li>
+      <li><strong>Calendario:</strong> vista mensual de misiones por fecha límite.</li>
+      <li><strong>Herramientas:</strong> exportar/importar JSON, notificaciones y respaldo de datos.</li>
       <li><strong>Archivo estelar:</strong> tareas completadas, con sección que se puede mostrar u ocultar.</li>
-      <li><strong>Acerca de:</strong> información del proyecto y créditos técnicos.</li>
+      <li><strong>Acerca de:</strong> información del proyecto, logros y créditos técnicos.</li>
     </ul>
     <p>
       Los datos persisten en el navegador mediante <code>localStorage</code>, de modo que las misiones
@@ -184,7 +192,23 @@
       visual noche (espacial) y día.
     </p>
 
-    <h3>3.3 Público objetivo</h3>
+    <h3>3.3 Problemática abordada</h3>
+    <p>
+      En la vida académica y personal es común acumular pendientes (tareas, entregas, actividades)
+      sin un sistema claro para priorizarlas y darles seguimiento. Muchas personas anotan en papel
+      o en notas del celular, pero al cerrar el navegador o cambiar de dispositivo <strong>pierden el avance</strong>.
+      Además, las listas simples no distinguen urgencia, categoría ni fecha límite, lo que dificulta
+      organizar el tiempo de forma efectiva.
+    </p>
+    <p>
+      <strong>ÓRBITA</strong> aborda esta problemática ofreciendo una lista de tareas web accesible
+      desde cualquier navegador, con clasificación por prioridad y categoría, fechas límite visibles,
+      archivo de tareas completadas y <strong>persistencia local</strong> mediante <code>localStorage</code>,
+      de modo que la información no se pierde al recargar la página. La publicación en GitHub Pages
+      permite consultar el proyecto desde Internet sin instalar software adicional.
+    </p>
+
+    <h3>3.4 Público objetivo</h3>
     <p>
       Estudiantes, profesionales o cualquier persona que necesite organizar actividades diarias
       de forma sencilla, con una interfaz clara y moderna accesible desde cualquier navegador actual.
@@ -192,13 +216,37 @@
   </section>
 
   <!-- ═══════════════════════════════════════════════════════════ -->
-  <!-- 4. CAPTURAS DE PANTALLA (mínimo 10)                        -->
+  <!-- 3b. OBJETIVOS                                              -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <section id="objetivos">
+    <h2>4. Objetivos</h2>
+
+    <h3>Objetivo general</h3>
+    <p>
+      Completar, mejorar y publicar el proyecto web ÓRBITA integrando almacenamiento local mediante
+      <code>localStorage</code> y publicación en GitHub Pages, demostrando el dominio de HTML, CSS
+      y JavaScript adquiridos durante el curso.
+    </p>
+
+    <h3>Objetivos específicos</h3>
+    <ul>
+      <li>Corregir errores detectados en la Fase 1 y mejorar la interfaz (diseño coherente, navegación y responsive).</li>
+      <li>Implementar persistencia de datos con <code>localStorage</code> para misiones, tema, logros y preferencias.</li>
+      <li>Desarrollar funcionalidades JavaScript: funciones personalizadas, DOM, eventos, validación y arreglos/objetos.</li>
+      <li>Publicar el sitio en GitHub Pages y verificar su funcionamiento en Internet.</li>
+      <li>Documentar el proyecto con capturas, descripción técnica y conclusiones grupales.</li>
+    </ul>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- 4. CAPTURAS DE PANTALLA (mínimo 15)                        -->
   <!-- ═══════════════════════════════════════════════════════════ -->
   <section id="capturas" class="page-break">
-    <h2>4. Capturas de pantalla del desarrollo</h2>
+    <h2>5. Capturas de pantalla del desarrollo</h2>
     <p class="no-print" style="background:#fff3cd; padding:10px; border-radius:6px; font-size:10pt;">
-      <strong>Importante:</strong> Guarde sus capturas en <code>documentacion/capturas/</code> con los nombres indicados.
-      Cuando existan las imágenes, reemplace el recuadro punteado automáticamente (si el archivo existe se mostrará la imagen).
+      <strong>Importante (Fase 2):</strong> Se requieren <strong>mínimo 15 capturas</strong>, incluyendo localStorage,
+      repositorio GitHub, configuración GitHub Pages y sitio publicado. Guarde las imágenes en
+      <code>documentacion/capturas/</code>.
     </p>
 
     <figure class="captura" id="cap01">
@@ -230,10 +278,10 @@
 
     <figure class="captura" id="cap04">
       <figcaption>Captura 4 — Menú de navegación y diseño semántico</figcaption>
-      <img src="capturas/04_menu_navegacion.jpg" alt="Captura 4"
+      <img src="capturas/04_menu_navegacion.png" alt="Captura 4"
            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
       <div class="placeholder" style="display:none;">
-        Insertar: barra de navegación con los 5 enlaces visibles
+        Insertar: barra de navegación con los 7 enlaces visibles (y menú móvil en pantalla pequeña)
       </div>
     </figure>
 
@@ -309,7 +357,52 @@
       </div>
     </figure>
 
-    <h3>4.1 Fragmentos de código de referencia (complemento a capturas)</h3>
+    <figure class="captura" id="cap13">
+      <figcaption>Captura 13 — localStorage en DevTools (Application → Local Storage)</figcaption>
+      <img src="capturas/13_localstorage_devtools.png" alt="Captura 13"
+           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="placeholder" style="display:none;">
+        Insertar: DevTools mostrando clave orbita_misiones con datos JSON
+      </div>
+    </figure>
+
+    <figure class="captura" id="cap14">
+      <figcaption>Captura 14 — Persistencia tras recargar la página (F5)</figcaption>
+      <img src="capturas/14_persistencia_recarga.png" alt="Captura 14"
+           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="placeholder" style="display:none;">
+        Insertar: misma misión visible después de recargar; badge del footer "X misiones guardadas"
+      </div>
+    </figure>
+
+    <figure class="captura" id="cap15">
+      <figcaption>Captura 15 — Repositorio en GitHub</figcaption>
+      <img src="capturas/15_repositorio_github.png" alt="Captura 15"
+           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="placeholder" style="display:none;">
+        Insertar: repositorio con archivos index.html, css/, js/, etc.
+      </div>
+    </figure>
+
+    <figure class="captura" id="cap16">
+      <figcaption>Captura 16 — Configuración GitHub Pages</figcaption>
+      <img src="capturas/16_github_pages_config.png" alt="Captura 16"
+           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="placeholder" style="display:none;">
+        Insertar: Settings → Pages con rama main y carpeta root
+      </div>
+    </figure>
+
+    <figure class="captura" id="cap17">
+      <figcaption>Captura 17 — Sitio publicado en Internet</figcaption>
+      <img src="capturas/17_sitio_publicado.png" alt="Captura 17"
+           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="placeholder" style="display:none;">
+        Insertar: navegador con URL https://usuario.github.io/repositorio funcionando
+      </div>
+    </figure>
+
+    <h3>5.1 Fragmentos de código de referencia (complemento a capturas)</h3>
     <p>Estructura semántica del encabezado y navegación en <code>index.html</code>:</p>
     <pre>&lt;header class="site-header"&gt; ... &lt;/header&gt;
 &lt;nav class="nav-principal" aria-label="Navegación principal"&gt;
@@ -332,15 +425,27 @@
   }
   return "";
 }</pre>
+
+    <p>Persistencia con <code>localStorage</code> en <code>js/app.js</code>:</p>
+    <pre>function cargarMisiones() {
+  const datos = localStorage.getItem("orbita_misiones");
+  misiones = datos ? JSON.parse(datos) : [];
+  misiones = misiones.map(normalizarMision);
+}
+
+function guardarMisiones() {
+  localStorage.setItem("orbita_misiones", JSON.stringify(misiones));
+  actualizarEstadoStorage();
+}</pre>
   </section>
 
   <!-- ═══════════════════════════════════════════════════════════ -->
   <!-- 5. DESCRIPCIÓN TÉCNICA                                       -->
   <!-- ═══════════════════════════════════════════════════════════ -->
   <section id="tecnica" class="page-break">
-    <h2>5. Descripción técnica</h2>
+    <h2>6. Descripción técnica</h2>
 
-    <h3>5.1 Archivos creados</h3>
+    <h3>6.1 Archivos creados</h3>
     <table>
       <thead>
         <tr>
@@ -353,7 +458,7 @@
         <tr>
           <td><code>index.html</code></td>
           <td>HTML5</td>
-          <td>Página principal: estructura semántica, menú, 5 secciones, formulario y enlaces a CSS/JS.</td>
+          <td>Página principal: estructura semántica, menú responsive, 7 secciones, formulario y enlaces a CSS/JS.</td>
         </tr>
         <tr>
           <td><code>css/styles.css</code></td>
@@ -366,43 +471,101 @@
           <td>Lógica de la aplicación: validación, CRUD de misiones, eventos, localStorage.</td>
         </tr>
         <tr>
+          <td><code>css/features.css</code></td>
+          <td>CSS3</td>
+          <td>Estilos de calendario, Pomodoro, modal extendido y widgets adicionales.</td>
+        </tr>
+        <tr>
+          <td><code>js/features.js</code></td>
+          <td>JavaScript</td>
+          <td>Calendario, drag-and-drop, export/import JSON, Pomodoro, rachas y logros.</td>
+        </tr>
+        <tr>
+          <td><code>js/effects.js</code></td>
+          <td>JavaScript</td>
+          <td>Efectos visuales: partículas, mapa orbital, animaciones y reloj.</td>
+        </tr>
+        <tr>
+          <td><code>data/misiones-ejemplo.json</code></td>
+          <td>JSON</td>
+          <td>Datos de ejemplo para la API mock (fetch).</td>
+        </tr>
+        <tr>
           <td><code>documentacion/</code></td>
           <td>Informe</td>
-          <td>Carpeta de entrega documental (este archivo, fichas, capturas).</td>
+          <td>Documentación grupal, fichas individuales, capturas e instrucciones de entrega.</td>
         </tr>
       </tbody>
     </table>
 
-    <h3>5.2 Estructura de carpetas</h3>
+    <h3>6.2 Estructura de carpetas</h3>
     <pre>WEB/
 ├── index.html
 ├── css/
-│   └── styles.css
+│   ├── styles.css
+│   └── features.css
 ├── js/
-│   └── app.js
+│   ├── app.js
+│   ├── features.js
+│   └── effects.js
+├── data/
+│   └── misiones-ejemplo.json
+├── icons/
+├── manifest.json
+├── sw.js
 └── documentacion/
     ├── Documentacion_Completa_ORBITA.html
     ├── Ficha_Individual_PLANTILLA.html
     ├── INSTRUCCIONES_ENTREGA.txt
-    └── capturas/
-        └── (imágenes .png)</pre>
+    └── capturas/</pre>
 
-    <h3>5.3 Cumplimiento de requisitos del proyecto</h3>
+    <h3>6.3 Uso de localStorage</h3>
+    <table>
+      <thead>
+        <tr><th>Clave</th><th>Contenido</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>orbita_misiones</code></td><td>Arreglo JSON con todas las misiones (activas y completadas)</td></tr>
+        <tr><td><code>orbita_tema</code></td><td>Preferencia visual: noche o día</td></tr>
+        <tr><td><code>orbita_logros</code></td><td>IDs de logros desbloqueados</td></tr>
+        <tr><td><code>orbita_racha</code></td><td>Racha de días completando misiones</td></tr>
+        <tr><td><code>orbita_accent</code></td><td>Color de acento personalizado</td></tr>
+        <tr><td><code>orbita_sonido</code></td><td>Preferencia de efectos de sonido</td></tr>
+      </tbody>
+    </table>
+
+    <h3>6.4 Cumplimiento de requisitos del proyecto (Fase 2)</h3>
     <table>
       <thead>
         <tr>
-          <th>Requisito (Fase 1)</th>
+          <th>Requisito (Fase 2)</th>
           <th>Cómo se cumple en ÓRBITA</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>HTML5 semántico + menú</td>
-          <td><span class="requisito-ok">Cumplido</span> — <code>header</code>, <code>nav</code>, <code>main</code>, <code>section</code>, <code>article</code>, <code>aside</code>, <code>footer</code>; menú sticky con 5 enlaces.</td>
+          <td>Mejoras de interfaz y responsive</td>
+          <td><span class="requisito-ok">Cumplido</span> — Menú móvil, diseño coherente, 7 secciones navegables, media queries.</td>
         </tr>
         <tr>
-          <td>Mínimo 3 secciones</td>
-          <td><span class="requisito-ok">Cumplido</span> — 5 secciones con contenido distribuido.</td>
+          <td>Persistencia con localStorage</td>
+          <td><span class="requisito-ok">Cumplido</span> — Misiones, tema, logros y preferencias; indicador en footer.</td>
+        </tr>
+        <tr>
+          <td>Funciones, DOM, eventos, validación</td>
+          <td><span class="requisito-ok">Cumplido</span> — app.js + features.js con CRUD, formulario validado, modales, calendario.</td>
+        </tr>
+        <tr>
+          <td>Objetos y arreglos</td>
+          <td><span class="requisito-ok">Cumplido</span> — Arreglo <code>misiones[]</code>, objetos Mision, subtareas, logros.</td>
+        </tr>
+        <tr>
+          <td>Publicación GitHub Pages</td>
+          <td><span class="requisito-ok">Pendiente grupo</span> — Subir repo y activar Pages; incluir URL en sección 6.</td>
+        </tr>
+        <tr>
+          <td>HTML5 semántico + menú</td>
+          <td><span class="requisito-ok">Cumplido</span> — <code>header</code>, <code>nav</code>, <code>main</code>, <code>section</code>, <code>article</code>, <code>aside</code>, <code>footer</code>.</td>
         </tr>
         <tr>
           <td>Formulario con validación</td>
@@ -410,15 +573,15 @@
         </tr>
         <tr>
           <td>CSS (colores, márgenes, tipografía)</td>
-          <td><span class="requisito-ok">Cumplido</span> — Hoja externa, variables CSS, fuentes Google Fonts, diseño responsive.</td>
+          <td><span class="requisito-ok">Cumplido</span> — Hojas externas, variables CSS, fuentes Google Fonts, diseño responsive.</td>
         </tr>
         <tr>
           <td>Mostrar / ocultar elementos</td>
-          <td><span class="requisito-ok">Cumplido</span> — Archivo estelar, mensaje de bienvenida, créditos del sistema.</td>
+          <td><span class="requisito-ok">Cumplido</span> — Archivo estelar, mensaje de bienvenida, modal, modo foco, menú móvil.</td>
         </tr>
         <tr>
           <td>Eventos con botones</td>
-          <td><span class="requisito-ok">Cumplido</span> — Tema día/noche, transmitir mensaje, resaltar urgentes, completar/eliminar misiones.</td>
+          <td><span class="requisito-ok">Cumplido</span> — Tema, completar/eliminar, exportar, calendario, Pomodoro, drag-and-drop.</td>
         </tr>
         <tr>
           <td>Validación de formularios (JS)</td>
@@ -435,7 +598,7 @@
       </tbody>
     </table>
 
-    <h3>5.4 Funcionalidades implementadas</h3>
+    <h3>6.5 Funcionalidades implementadas</h3>
     <ul class="check">
       <li>Registro de misiones (título, descripción, prioridad, fecha límite, categoría).</li>
       <li>Listado de misiones activas con tarjetas codificadas por color de prioridad.</li>
@@ -447,23 +610,43 @@
       <li>Mensajes toast de éxito y error al interactuar con el formulario.</li>
       <li>Navegación suave entre secciones y marcado del enlace activo al hacer scroll.</li>
       <li>Vaciar archivo de misiones completadas.</li>
+      <li>Exportación e importación de misiones en JSON.</li>
+      <li>Indicador de persistencia localStorage en el footer.</li>
+      <li>Menú responsive con botón hamburguesa en móvil.</li>
     </ul>
 
-    <h3>5.5 Tecnologías utilizadas</h3>
+    <h3>6.6 Tecnologías utilizadas</h3>
     <ul>
       <li><strong>HTML5</strong> — Estructura y accesibilidad básica (<code>aria-label</code>, <code>role</code>).</li>
       <li><strong>CSS3</strong> — Flexbox, Grid, variables custom, animaciones, media queries.</li>
       <li><strong>JavaScript (ES6+)</strong> — Módulo IIFE, funciones flecha, template literals, DOM API.</li>
       <li><strong>localStorage API</strong> — Persistencia de datos sin servidor.</li>
       <li><strong>Google Fonts</strong> — Orbitron y Exo 2 (tipografía del tema espacial).</li>
+      <li><strong>GitHub Pages</strong> — Publicación del sitio en Internet (configuración del grupo).</li>
     </ul>
   </section>
 
   <!-- ═══════════════════════════════════════════════════════════ -->
-  <!-- 6. CONCLUSIÓN GRUPAL                                         -->
+  <!-- 6. URL DEL PROYECTO PUBLICADO                              -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <section id="url-publicada" class="page-break">
+    <h2>7. URL del proyecto publicado</h2>
+    <p>Complete con las URLs reales de su grupo tras publicar en GitHub:</p>
+    <table>
+      <tr><th>Repositorio GitHub</th><td><a href="#">https://github.com/[usuario]/[repositorio]</a></td></tr>
+      <tr><th>Sitio publicado (GitHub Pages)</th><td><a href="#">https://[usuario].github.io/[repositorio]/</a></td></tr>
+    </table>
+    <p style="margin-top:1em;">
+      <strong>Verificación:</strong> Abrir la URL publicada, crear una misión, recargar la página (F5) y confirmar
+      que los datos persisten. Adjuntar capturas 15–17 en la sección 4.
+    </p>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- 7. CONCLUSIONES GRUPALES                                   -->
   <!-- ═══════════════════════════════════════════════════════════ -->
   <section id="conclusion" class="page-break">
-    <h2>6. Conclusión grupal</h2>
+    <h2>8. Conclusiones</h2>
     <p>
       La elaboración del proyecto <strong>ÓRBITA</strong> permitió al grupo aplicar de manera integrada
       las tecnologías fundamentales del desarrollo web front-end. Se logró una aplicación
@@ -478,13 +661,44 @@
       y la preparación de la exposición individual por secciones.
     </p>
     <p>
-      Como aspectos de mejora futura, el grupo identifica la posibilidad de añadir edición de misiones
-      en línea, sincronización en la nube, notificaciones de fechas límite y mayor cobertura de pruebas
-      de accesibilidad (WCAG).
+      Como aspectos de mejora futura, el grupo identifica sincronización en la nube, notificaciones
+      push automáticas y mayor cobertura de pruebas de accesibilidad (WCAG).
+    </p>
+    <h3>Aprendizajes obtenidos</h3>
+    <p>
+      El grupo consolidó el uso de <strong>HTML5 semántico</strong> para estructurar una aplicación de
+      una sola página con encabezado, navegación, secciones temáticas y pie de página accesible.
+      En <strong>CSS</strong> aprendimos a organizar el diseño con variables, temas claro/oscuro,
+      Flexbox, Grid y <em>media queries</em> para adaptar el menú y las tarjetas a dispositivos móviles.
     </p>
     <p>
-      En conjunto, se considera que el entregable cumple los requisitos de la <strong>Fase 1</strong>
-      del proyecto grupal y constituye una base sólida para ampliaciones en fases posteriores del curso.
+      Con <strong>JavaScript</strong> reforzamos la programación orientada a eventos: validación de
+      formularios, creación dinámica de listas, modales, filtros y funciones reutilizables. Comprendimos
+      el ciclo <em>guardar → leer → renderizar</em> con <code>localStorage</code>, convirtiendo el arreglo
+      de misiones en JSON persistente. Finalmente, la publicación en <strong>GitHub Pages</strong> nos
+      permitió llevar el proyecto del entorno local a una URL pública verificable.
+    </p>
+
+    <h3>Dificultades encontradas</h3>
+    <p>
+      Entre los retos técnicos destacan: depurar errores de sintaxis en JavaScript que impedían cargar
+      la aplicación; asegurar que los datos no se pierdan al recargar (normalización del JSON guardado);
+      diseñar una navegación usable en pantallas pequeñas (menú colapsable); y configurar correctamente
+      GitHub Pages para que las rutas relativas a CSS, JS y datos JSON funcionen en la URL publicada.
+      También fue necesario probar la persistencia en DevTools (Application → Local Storage) para
+      documentar el cumplimiento del requisito.
+    </p>
+
+    <h3>Aplicaciones futuras</h3>
+    <p>
+      ÓRBITA puede ampliarse como herramienta personal de productividad para estudiantes (seguimiento
+      de tareas por materia), equipos de trabajo (misiones compartidas) o uso individual diario.
+      A futuro se podría integrar sincronización en la nube, recordatorios automáticos, edición
+      colaborativa y una versión instalable (PWA) ya preparada parcialmente en el proyecto.
+    </p>
+    <p>
+      En conjunto, se considera que el entregable cumple los requisitos de la <strong>Fase 2</strong>
+      del proyecto grupal: interfaz mejorada, localStorage funcional, JavaScript completo y sitio publicado.
     </p>
 
     <p style="margin-top:2em;"><strong>Firmas del grupo (opcional en versión impresa):</strong></p>
@@ -496,8 +710,90 @@
     </table>
   </section>
 
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- 9. EXPOSICIÓN EN VIDEO (5 minutos)                         -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <section id="exposicion-video" class="page-break">
+    <h2>9. Exposición en video (5 minutos)</h2>
+    <p>
+      Según el Tercer Examen Parcial, el grupo debe entregar un <strong>video grupal de aproximadamente
+      5 minutos</strong> que incluya presentación general, objetivos, demostración en funcionamiento
+      y una <strong>parte individual</strong> por integrante (HTML, CSS, JavaScript, localStorage o GitHub Pages).
+    </p>
+
+    <h3>9.1 Estructura sugerida del video</h3>
+    <table>
+      <thead>
+        <tr><th>Tiempo</th><th>Parte</th><th>Contenido</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>0:00 – 0:45</td><td>Grupal</td><td>Presentación del proyecto ÓRBITA, integrantes y objetivo general.</td></tr>
+        <tr><td>0:45 – 2:00</td><td>Grupal</td><td>Demostración: crear misión, completar, recargar (F5) y mostrar persistencia.</td></tr>
+        <tr><td>2:00 – 2:45</td><td>Individual</td><td>Integrante HTML: estructura de <code>index.html</code>, menú y formulario.</td></tr>
+        <tr><td>2:45 – 3:15</td><td>Individual</td><td>Integrante CSS: tema noche/día, tarjetas y diseño responsive.</td></tr>
+        <tr><td>3:15 – 3:45</td><td>Individual</td><td>Integrante JS: validación y funciones en <code>app.js</code>.</td></tr>
+        <tr><td>3:45 – 4:15</td><td>Individual</td><td>Integrante localStorage: DevTools + clave <code>orbita_misiones</code>.</td></tr>
+        <tr><td>4:15 – 4:45</td><td>Individual</td><td>Integrante GitHub Pages: repo, configuración Pages y URL publicada.</td></tr>
+        <tr><td>4:45 – 5:00</td><td>Grupal</td><td>Cierre: conclusiones breves y agradecimiento.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>9.2 Datos del video (completar antes de entregar)</h3>
+    <table>
+      <tr><th>Enlace del video</th><td>[YouTube / Google Drive / enlace público]</td></tr>
+      <tr><th>Duración real</th><td>[Ej. 4 min 52 seg]</td></tr>
+      <tr><th>Herramienta de grabación</th><td>[Ej. OBS, Zoom, PowerPoint grabar pantalla]</td></tr>
+      <tr><th>Fecha de grabación</th><td>[Día / mes / año]</td></tr>
+    </table>
+
+    <h3>9.3 Guion breve por tema (parte individual)</h3>
+    <ul>
+      <li><strong>HTML:</strong> “Usamos etiquetas semánticas: header, nav, main, section y formulario con campos obligatorios en #nueva-mision.”</li>
+      <li><strong>CSS:</strong> “Variables CSS controlan colores; el botón de tema cambia data-tema; en móvil el menú se despliega con el botón ☰.”</li>
+      <li><strong>JavaScript:</strong> “validarFormularioCompleto() revisa título, prioridad, fecha y categoría antes de agregarMision().”</li>
+      <li><strong>localStorage:</strong> “Al guardar, JSON.stringify escribe en orbita_misiones; al cargar, JSON.parse restaura las misiones.”</li>
+      <li><strong>GitHub Pages:</strong> “Subimos el repo, activamos Pages en main/root y verificamos la URL pública.”</li>
+    </ul>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- 10. CHECKLIST DE ENTREGABLES (PDF)                         -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <section id="checklist" class="page-break">
+    <h2>10. Checklist de entregables</h2>
+    <p>Marque cada ítem antes de comprimir el ZIP y entregar:</p>
+    <table>
+      <thead>
+        <tr><th>#</th><th>Entregable (PDF)</th><th>Estado</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>Carátula (proyecto, integrantes, carrera, semestre, docente, fecha)</td><td>☐ Completo</td></tr>
+        <tr><td>2</td><td>Introducción con problemática abordada</td><td>☐ Completo</td></tr>
+        <tr><td>3</td><td>Objetivo general y objetivos específicos</td><td>☐ Completo</td></tr>
+        <tr><td>4</td><td>Mínimo 15 capturas (HTML, CSS, JS, localStorage, GitHub, Pages, sitio)</td><td>☐ Completo</td></tr>
+        <tr><td>5</td><td>Descripción técnica (carpetas, archivos, tecnologías, funciones, localStorage)</td><td>☐ Completo</td></tr>
+        <tr><td>6</td><td>URL del repositorio y sitio publicado</td><td>☐ Completo</td></tr>
+        <tr><td>7</td><td>Conclusiones (aprendizajes, dificultades, aplicaciones futuras)</td><td>☐ Completo</td></tr>
+        <tr><td>—</td><td>Video grupal ~5 min (exposición grupal e individual)</td><td>☐ Enlace listo</td></tr>
+        <tr><td>—</td><td>Ficha individual PDF por cada integrante</td><td>☐ Una por persona</td></tr>
+        <tr><td>—</td><td>Carpeta WEB con proyecto funcional</td><td>☐ Incluida en ZIP</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Criterios de evaluación (referencia)</h3>
+    <table>
+      <tr><td>Funcionalidad del proyecto</td><td>30%</td></tr>
+      <tr><td>HTML y CSS</td><td>20%</td></tr>
+      <tr><td>JavaScript</td><td>20%</td></tr>
+      <tr><td>localStorage</td><td>10%</td></tr>
+      <tr><td>GitHub Pages</td><td>10%</td></tr>
+      <tr><td>Exposición grupal e individual (video)</td><td>10%</td></tr>
+      <tr><th>TOTAL</th><th>100%</th></tr>
+    </table>
+  </section>
+
   <section id="anexo-fichas">
-    <h2>7. Anexo — Fichas individuales</h2>
+    <h2>11. Anexo — Fichas individuales</h2>
     <p>
       Cada integrante debe entregar <strong>una ficha individual</strong> (una página por persona),
       usando el archivo <code>Ficha_Individual_PLANTILLA.html</code> incluido en esta carpeta.
@@ -512,12 +808,14 @@
         <tr><td>Integrante 1</td><td>HTML — estructura y formulario</td><td>index.html</td></tr>
         <tr><td>Integrante 2</td><td>CSS — diseño y temas</td><td>css/styles.css</td></tr>
         <tr><td>Integrante 3</td><td>JavaScript — validación y lógica</td><td>js/app.js</td></tr>
+        <tr><td>Integrante 4</td><td>localStorage — persistencia de datos</td><td>js/app.js, js/features.js</td></tr>
+        <tr><td>Integrante 5</td><td>GitHub Pages — publicación</td><td>Repositorio y URL publicada</td></tr>
       </tbody>
     </table>
   </section>
 
   <p class="pie">
-    Documentación generada para el Proyecto Grupal ÓRBITA — Aplicaciones y Programación Web — Fase 1<br>
+    Documentación generada para el Proyecto Grupal ÓRBITA — Aplicaciones y Programación Web — Fase 2<br>
     Para exportar a PDF: Ctrl + P → Guardar como PDF (recomendado: Google Chrome o Microsoft Edge).
   </p>
 

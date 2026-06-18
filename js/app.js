@@ -1,6 +1,6 @@
 /**
  * ÓRBITA — Centro de Misiones (Lista de Tareas)
- * Proyecto: Aplicaciones y Programación Web — Fase 1
+ * Proyecto: Aplicaciones y Programación Web — Fase 2
  * Funcionalidades: validación, show/hide, eventos, localStorage
  */
 
@@ -64,6 +64,7 @@
   let logrosDesbloqueados = [];
   let tickCountdownId = null;
   let filtroSoloHoy = false;
+  let enviandoFormulario = false;
 
   // =============================================
   // FUNCIONES PERSONALIZADAS (requisito del curso)
@@ -207,14 +208,44 @@
       const datos = localStorage.getItem(STORAGE_KEY);
       misiones = datos ? JSON.parse(datos) : [];
       if (!Array.isArray(misiones)) misiones = [];
-      misiones = misiones.map(normalizarMision);
+      misiones = misiones.map(function (m, i) {
+        return normalizarMision(m, i);
+      });
     } catch (e) {
       misiones = [];
     }
   }
 
   function guardarMisiones() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(misiones));
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(misiones));
+      actualizarEstadoStorage();
+      return true;
+    } catch (err) {
+      console.error("ÓRBITA: error al guardar en localStorage", err);
+      actualizarEstadoStorage(true);
+      mostrarToastGlobal("⚠ No se pudo guardar en localStorage. Revisa permisos del navegador.");
+      return false;
+    }
+  }
+
+  function actualizarEstadoStorage(error) {
+    var el = document.getElementById("storage-status");
+    if (!el) return;
+    if (error) {
+      el.textContent = "Error al guardar datos";
+      el.classList.add("storage-error");
+      return;
+    }
+    try {
+      var n = misiones.length;
+      el.textContent = n === 1 ? "1 misión guardada" : n + " misiones guardadas";
+      el.title = "Datos en localStorage (clave: " + STORAGE_KEY + "). Recarga la página para comprobar la persistencia.";
+      el.classList.remove("storage-error");
+    } catch (err) {
+      el.textContent = "Error al guardar";
+      el.classList.add("storage-error");
+    }
   }
 
   function cargarTema() {
@@ -232,8 +263,10 @@
   }
 
   function actualizarBotonTema(tema) {
+    if (!btnTema) return;
     const icono = btnTema.querySelector(".btn-tema-icon");
     const texto = btnTema.querySelector(".btn-tema-texto");
+    if (!icono || !texto) return;
     if (tema === "dia") {
       icono.textContent = "☀";
       texto.textContent = "Modo noche";
@@ -284,18 +317,118 @@
     return mensaje === "";
   }
 
+  function validarDatosMision(datos) {
+    var errores = [];
+    if (validarCampoTitulo(datos.titulo)) errores.push(validarCampoTitulo(datos.titulo));
+    if (validarCampoSelect(datos.prioridad, "prioridad")) errores.push(validarCampoSelect(datos.prioridad, "prioridad"));
+    if (validarCampoFecha(datos.fecha)) errores.push(validarCampoFecha(datos.fecha));
+    if (validarCampoSelect(datos.categoria, "categoría")) errores.push(validarCampoSelect(datos.categoria, "categoría"));
+    return errores;
+  }
+
+  function getPrioridadSeleccionada() {
+    var radio = document.querySelector('input[name="prioridad-radio"]:checked');
+    if (radio) return radio.value;
+    var sel = document.getElementById("prioridad-mision");
+    return sel ? sel.value : "";
+  }
+
+  function sincronizarPrioridad(valor) {
+    var sel = document.getElementById("prioridad-mision");
+    if (sel) sel.value = valor || "";
+    document.querySelectorAll('input[name="prioridad-radio"]').forEach(function (r) {
+      r.checked = r.value === valor;
+    });
+    document.querySelectorAll(".chip-prioridad").forEach(function (c) {
+      c.classList.toggle("activo", c.getAttribute("for")
+        ? document.getElementById(c.getAttribute("for")) && document.getElementById(c.getAttribute("for")).checked
+        : c.dataset.prioridad === valor);
+    });
+  }
+
+  function limpiarErroresFormulario() {
+    ["error-titulo", "error-prioridad", "error-fecha", "error-categoria"].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.textContent = "";
+    });
+    ["titulo-mision", "prioridad-mision", "fecha-mision", "categoria-mision"].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.classList.remove("invalido");
+    });
+    document.querySelectorAll(".prioridad-chips").forEach(function (g) {
+      g.classList.remove("invalido");
+    });
+  }
+
   function validarFormularioCompleto() {
     const titulo = document.getElementById("titulo-mision").value;
-    const prioridad = document.getElementById("prioridad-mision").value;
+    const prioridad = getPrioridadSeleccionada();
     const fecha = document.getElementById("fecha-mision").value;
     const categoria = document.getElementById("categoria-mision").value;
 
+    sincronizarPrioridad(prioridad);
+
     const okTitulo = mostrarErrorCampo("error-titulo", "titulo-mision", validarCampoTitulo(titulo));
-    const okPrioridad = mostrarErrorCampo("error-prioridad", "prioridad-mision", validarCampoSelect(prioridad, "prioridad"));
+    var okPrioridad = mostrarErrorCampo("error-prioridad", "prioridad-mision", validarCampoSelect(prioridad, "prioridad"));
+    if (!okPrioridad) {
+      var chips = document.querySelector(".prioridad-chips");
+      if (chips) chips.classList.add("invalido");
+    } else {
+      var chipsOk = document.querySelector(".prioridad-chips");
+      if (chipsOk) chipsOk.classList.remove("invalido");
+    }
     const okFecha = mostrarErrorCampo("error-fecha", "fecha-mision", validarCampoFecha(fecha));
     const okCategoria = mostrarErrorCampo("error-categoria", "categoria-mision", validarCampoSelect(categoria, "categoría"));
 
     return okTitulo && okPrioridad && okFecha && okCategoria;
+  }
+
+  function obtenerDatosFormulario() {
+    return {
+      titulo: document.getElementById("titulo-mision").value,
+      descripcion: document.getElementById("descripcion-mision").value,
+      prioridad: getPrioridadSeleccionada(),
+      fecha: document.getElementById("fecha-mision").value,
+      categoria: document.getElementById("categoria-mision").value,
+      etiquetas: parsearEtiquetas(document.getElementById("etiquetas-mision") && document.getElementById("etiquetas-mision").value),
+      subtareas: parsearSubtareas(document.getElementById("subtareas-mision") && document.getElementById("subtareas-mision").value),
+    };
+  }
+
+  function resetearFormularioMision() {
+    if (!form) return;
+    form.reset();
+    sincronizarPrioridad("");
+    limpiarErroresFormulario();
+    document.getElementById("fecha-mision").setAttribute("min", getFechaHoyLocal());
+  }
+
+  function enviarFormularioMision() {
+    if (!form || enviandoFormulario) return;
+    if (!validarFormularioCompleto()) {
+      mostrarToast(toastFormulario, "Corrige los errores del manifiesto antes de lanzar.", "error");
+      return;
+    }
+
+    enviandoFormulario = true;
+    var datos = obtenerDatosFormulario();
+    var panel = document.getElementById("panel-misiones");
+
+    agregarMision(datos);
+
+    var finalizar = function () {
+      resetearFormularioMision();
+      mostrarToast(toastFormulario, "🚀 Misión lanzada a órbita correctamente.", "exito");
+      verificarLogros();
+      enviandoFormulario = false;
+      if (panel) panel.scrollIntoView({ behavior: "smooth" });
+    };
+
+    if (window.OrbitaFX && window.OrbitaFX.lanzarCohete) {
+      window.OrbitaFX.lanzarCohete(form.querySelector(".btn-lanzar"), panel, finalizar);
+    } else {
+      finalizar();
+    }
   }
 
   // =============================================
@@ -325,7 +458,7 @@
       countdownHtml =
         '<div class="countdown-texto">' + cr.texto + "</div>" +
         '<div class="barra-countdown"><div class="barra-countdown-fill ' + cr.clase +
-        '" style="width:' + cr.pct + '%" data-fecha="' + mision.fecha + '"></div></div>";
+        '" style="width:' + cr.pct + '%" data-fecha="' + mision.fecha + '"></div></div>';
     }
 
     var tagsHtml = "";
@@ -374,8 +507,16 @@
     return div.innerHTML;
   }
 
+  function getFechaHoyLocal() {
+    var d = new Date();
+    var y = d.getFullYear();
+    var m = String(d.getMonth() + 1).padStart(2, "0");
+    var day = String(d.getDate()).padStart(2, "0");
+    return y + "-" + m + "-" + day;
+  }
+
   function esFechaHoy(fechaISO) {
-    return fechaISO === new Date().toISOString().split("T")[0];
+    return fechaISO === getFechaHoyLocal();
   }
 
   function obtenerMisionesActivas(filtro, busqueda) {
@@ -411,6 +552,8 @@
   }
 
   function renderizarListas() {
+    if (!listaActivas || !listaCompletadas || !filtroCategoria || !panelVacio) return;
+
     const filtro = filtroCategoria.value;
     const busqueda = buscarMision ? buscarMision.value : "";
     const activas = obtenerMisionesActivas(filtro, busqueda);
@@ -508,6 +651,8 @@
   function actualizarMision(id, datos) {
     var m = misiones.find(function (x) { return x.id === id; });
     if (!m) return false;
+    var errores = validarDatosMision(datos);
+    if (errores.length) return false;
     m.titulo = datos.titulo.trim();
     m.descripcion = datos.descripcion.trim();
     m.prioridad = datos.prioridad;
@@ -675,96 +820,190 @@
 
   function inicializarNavegacion() {
     const enlaces = document.querySelectorAll(".nav-link");
+    const btnMenu = document.getElementById("btn-menu-movil");
+    const nav = document.querySelector(".nav-principal");
+    const secciones = document.querySelectorAll(".seccion");
+    const iconoMenu = btnMenu && btnMenu.querySelector(".btn-menu-icon");
+    const textoMenu = btnMenu && btnMenu.querySelector(".btn-menu-texto");
+
+    function setEnlaceActivo(id) {
+      enlaces.forEach(function (link) {
+        var activo = link.getAttribute("href") === "#" + id;
+        link.classList.toggle("activo", activo);
+        if (activo) {
+          link.setAttribute("aria-current", "true");
+        } else {
+          link.removeAttribute("aria-current");
+        }
+      });
+    }
+
+    function cerrarMenuMovil() {
+      if (!nav || !btnMenu) return;
+      nav.classList.remove("nav-abierta");
+      btnMenu.setAttribute("aria-expanded", "false");
+      if (iconoMenu) iconoMenu.textContent = "☰";
+      if (textoMenu) textoMenu.textContent = "Menú de secciones";
+    }
+
+    function abrirMenuMovil() {
+      if (!nav || !btnMenu) return;
+      nav.classList.add("nav-abierta");
+      btnMenu.setAttribute("aria-expanded", "true");
+      if (iconoMenu) iconoMenu.textContent = "✕";
+      if (textoMenu) textoMenu.textContent = "Cerrar menú";
+    }
+
     enlaces.forEach(function (link) {
       link.addEventListener("click", function () {
-        enlaces.forEach(function (l) {
-          l.classList.remove("activo");
-        });
-        link.classList.add("activo");
+        setEnlaceActivo(link.getAttribute("href").slice(1));
+        if (window.innerWidth <= 768) {
+          cerrarMenuMovil();
+        }
       });
     });
 
+    if (btnMenu && nav) {
+      btnMenu.addEventListener("click", function () {
+        if (nav.classList.contains("nav-abierta")) {
+          cerrarMenuMovil();
+        } else {
+          abrirMenuMovil();
+        }
+      });
+    }
+
+    document.addEventListener("click", function (e) {
+      if (!nav || !nav.classList.contains("nav-abierta")) return;
+      if (nav.contains(e.target) || (btnMenu && btnMenu.contains(e.target))) return;
+      cerrarMenuMovil();
+    });
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key !== "Escape") return;
+      var focus = document.getElementById("focus-overlay");
+      if (focus && !focus.classList.contains("oculto")) {
+        if (window.OrbitaFeatures && window.OrbitaFeatures.cerrarFocus) {
+          window.OrbitaFeatures.cerrarFocus();
+        } else {
+          focus.classList.add("oculto");
+          document.body.style.overflow = "";
+        }
+        return;
+      }
+      if (modalMision && !modalMision.classList.contains("oculto")) {
+        cerrarModal();
+        return;
+      }
+      cerrarMenuMovil();
+    });
+
+    if (secciones.length) {
+      function actualizarSeccionActiva() {
+        var offset = getNavOffset() + 16;
+        var actual = secciones[0].id;
+        secciones.forEach(function (sec) {
+          if (sec.getBoundingClientRect().top <= offset) {
+            actual = sec.id;
+          }
+        });
+        setEnlaceActivo(actual);
+      }
+
+      window.addEventListener("scroll", actualizarSeccionActiva, { passive: true });
+      window.addEventListener("resize", actualizarSeccionActiva);
+      actualizarSeccionActiva();
+    }
+  }
+
+  function getNavOffset() {
+    var val = getComputedStyle(document.documentElement).getPropertyValue("--nav-offset");
+    var num = parseFloat(val);
+    if (val.indexOf("rem") !== -1 && !isNaN(num)) {
+      return num * parseFloat(getComputedStyle(document.documentElement).fontSize);
+    }
+    return 120;
+  }
+
+  function inicializarVolverArriba() {
+    var btn = document.getElementById("btn-volver-arriba");
+    if (!btn) return;
+
     window.addEventListener("scroll", function () {
-      const secciones = document.querySelectorAll(".seccion");
-      let actual = "";
-      secciones.forEach(function (sec) {
-        const top = sec.offsetTop - 120;
-        if (window.scrollY >= top) actual = sec.id;
-      });
-      enlaces.forEach(function (link) {
-        link.classList.toggle("activo", link.getAttribute("href") === "#" + actual);
-      });
+      if (window.scrollY > 400) {
+        btn.classList.remove("oculto");
+      } else {
+        btn.classList.add("oculto");
+      }
+    }, { passive: true });
+
+    btn.addEventListener("click", function () {
+      window.scrollTo({ top: 0, behavior: "smooth" });
     });
   }
 
   function inicializarFormulario() {
-    const hoy = new Date().toISOString().split("T")[0];
-    document.getElementById("fecha-mision").setAttribute("min", hoy);
+    if (!form) {
+      console.error("ÓRBITA: no se encontró #form-mision");
+      return;
+    }
 
-    ["titulo-mision", "prioridad-mision", "fecha-mision", "categoria-mision"].forEach(function (id) {
-      const el = document.getElementById(id);
+    var fechaInput = document.getElementById("fecha-mision");
+    if (fechaInput) {
+      fechaInput.setAttribute("min", getFechaHoyLocal());
+      if (!fechaInput.value) fechaInput.value = getFechaHoyLocal();
+    }
+
+    ["titulo-mision", "fecha-mision", "categoria-mision"].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (!el) return;
       el.addEventListener("blur", validarFormularioCompleto);
       el.addEventListener("input", function () {
         if (el.classList.contains("invalido")) validarFormularioCompleto();
       });
+      el.addEventListener("change", function () {
+        if (el.classList.contains("invalido")) validarFormularioCompleto();
+      });
     });
 
-    document.querySelectorAll(".chip-prioridad").forEach(function (chip) {
-      chip.addEventListener("click", function () {
-        document.querySelectorAll(".chip-prioridad").forEach(function (c) {
-          c.classList.remove("activo");
-        });
-        chip.classList.add("activo");
-        document.getElementById("prioridad-mision").value = chip.dataset.prioridad;
+    document.querySelectorAll('input[name="prioridad-radio"]').forEach(function (radio) {
+      radio.addEventListener("change", function () {
+        sincronizarPrioridad(radio.value);
         validarFormularioCompleto();
       });
     });
 
-    form.addEventListener("reset", function () {
-      document.querySelectorAll(".chip-prioridad").forEach(function (c) {
-        c.classList.remove("activo");
+    document.querySelectorAll(".chip-prioridad").forEach(function (label) {
+      label.addEventListener("click", function () {
+        setTimeout(validarFormularioCompleto, 0);
       });
+    });
+
+    var selPrioridad = document.getElementById("prioridad-mision");
+    if (selPrioridad) {
+      selPrioridad.addEventListener("change", function () {
+        sincronizarPrioridad(selPrioridad.value);
+        validarFormularioCompleto();
+      });
+    }
+
+    form.addEventListener("reset", function () {
+      setTimeout(function () {
+        sincronizarPrioridad("");
+        limpiarErroresFormulario();
+        if (fechaInput) fechaInput.setAttribute("min", getFechaHoyLocal());
+      }, 0);
     });
 
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-      if (!validarFormularioCompleto()) {
-        mostrarToast(toastFormulario, "Corrige los errores del manifiesto antes de lanzar.", "error");
-        return;
-      }
-
-      var datos = {
-        titulo: document.getElementById("titulo-mision").value,
-        descripcion: document.getElementById("descripcion-mision").value,
-        prioridad: document.getElementById("prioridad-mision").value,
-        fecha: document.getElementById("fecha-mision").value,
-        categoria: document.getElementById("categoria-mision").value,
-        etiquetas: parsearEtiquetas(document.getElementById("etiquetas-mision") && document.getElementById("etiquetas-mision").value),
-        subtareas: parsearSubtareas(document.getElementById("subtareas-mision") && document.getElementById("subtareas-mision").value),
-      };
-
-      var panel = document.getElementById("panel-misiones");
-      var lanzar = function () {
-        agregarMision(datos);
-        form.reset();
-        document.querySelectorAll(".chip-prioridad").forEach(function (c) {
-          c.classList.remove("activo");
-        });
-        document.getElementById("fecha-mision").setAttribute("min", hoy);
-        mostrarToast(toastFormulario, "🚀 Misión lanzada a órbita correctamente.", "exito");
-        verificarLogros();
-        panel.scrollIntoView({ behavior: "smooth" });
-      };
-
-      if (window.OrbitaFX && window.OrbitaFX.lanzarCohete) {
-        window.OrbitaFX.lanzarCohete(form.querySelector(".btn-lanzar"), panel, lanzar);
-      } else {
-        lanzar();
-      }
+      enviarFormularioMision();
     });
   }
 
   function inicializarPanel() {
+    if (!listaActivas || !listaCompletadas || !filtroCategoria) return;
+
     listaActivas.addEventListener("click", manejarAccionLista);
     listaCompletadas.addEventListener("click", manejarAccionLista);
 
@@ -801,6 +1040,8 @@
   }
 
   function manejarAccionLista(e) {
+    if (e.target.closest(".drag-handle")) return;
+
     const btn = e.target.closest("[data-accion]");
     const tarjeta = e.target.closest(".tarjeta-mision");
 
@@ -839,13 +1080,15 @@
         cerrarModal();
       }
     });
-    document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape") cerrarModal();
-    });
+  }
+
+  function bindClick(id, handler) {
+    var el = document.getElementById(id);
+    if (el) el.addEventListener("click", handler);
   }
 
   function inicializarInteractivos() {
-    document.getElementById("btn-mostrar-bienvenida").addEventListener("click", function () {
+    bindClick("btn-mostrar-bienvenida", function () {
       const hora = new Date().getHours();
       let saludo = "Buenas noches, comandante.";
       if (hora >= 5 && hora < 12) saludo = "Buenos días, comandante.";
@@ -861,7 +1104,7 @@
       }, 6000);
     });
 
-    document.getElementById("btn-mostrar-creditos").addEventListener("click", function () {
+    bindClick("btn-mostrar-creditos", function () {
       creditosSistema.textContent =
         "Sistema ÓRBITA v1.0 — HTML5 · CSS3 · JavaScript ES6+ · localStorage. Diseño original: tema espacial de misiones.";
       alternarVisibilidad(creditosSistema, true);
@@ -870,7 +1113,7 @@
       }, 5000);
     });
 
-    btnTema.addEventListener("click", alternarTema);
+    if (btnTema) btnTema.addEventListener("click", alternarTema);
   }
 
   // =============================================
@@ -878,24 +1121,43 @@
   // =============================================
 
   function init() {
-    document.getElementById("anio-footer").textContent = new Date().getFullYear();
-    cargarTema();
-    cargarMisiones();
-    cargarLogros();
-    renderizarListas();
-    verificarLogros();
-    inicializarNavegacion();
-    inicializarFormulario();
-    inicializarPanel();
-    inicializarModal();
-    inicializarInteractivos();
-    if (window.OrbitaFeatures) window.OrbitaFeatures.init(window.OrbitaApp);
+    try {
+      var anio = document.getElementById("anio-footer");
+      if (anio) anio.textContent = new Date().getFullYear();
+
+      inicializarFormulario();
+      cargarTema();
+      cargarMisiones();
+      cargarLogros();
+      renderizarListas();
+      actualizarEstadoStorage();
+      verificarLogros();
+      inicializarNavegacion();
+      inicializarVolverArriba();
+      inicializarPanel();
+      inicializarModal();
+      inicializarInteractivos();
+
+      if (window.OrbitaFeatures) {
+        window.OrbitaFeatures.init(window.OrbitaApp);
+      }
+
+      document.documentElement.classList.add("orbita-listo");
+    } catch (err) {
+      console.error("ÓRBITA: error al iniciar la aplicación", err);
+      if (toastGlobal) {
+        toastGlobal.textContent = "Error al cargar ÓRBITA. Recarga con Ctrl+Shift+R.";
+        toastGlobal.classList.remove("oculto");
+      }
+    }
   }
 
   window.OrbitaApp = {
     getMisiones: function () { return misiones; },
     setMisiones: function (arr) {
-      misiones = arr.map(normalizarMision);
+      misiones = arr.map(function (m, i) {
+        return normalizarMision(m, i);
+      });
       guardarMisiones();
       renderizarListas();
     },
@@ -917,6 +1179,12 @@
     escaparHTML: escaparHTML,
     mostrarToastGlobal: mostrarToastGlobal,
     verificarLogros: verificarLogros,
+    validarDatosMision: validarDatosMision,
+    getFechaHoyLocal: getFechaHoyLocal,
+    getPrioridadSeleccionada: getPrioridadSeleccionada,
+    sincronizarPrioridad: sincronizarPrioridad,
+    validarCampoTitulo: validarCampoTitulo,
+    validarCampoFecha: validarCampoFecha,
     setFiltroSoloHoy: function (v) { filtroSoloHoy = v; renderizarListas(); },
     getFiltroSoloHoy: function () { return filtroSoloHoy; },
     esFechaHoy: esFechaHoy,

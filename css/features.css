@@ -69,6 +69,7 @@
   font-size: 1rem;
   user-select: none;
   align-self: center;
+  touch-action: none;
 }
 
 .btn-secundario.activo {
@@ -422,4 +423,22 @@
     right: 1rem;
   }
   .cal-celda { min-height: 36px; font-size: 0.6rem; }
+  .focus-inner {
+    padding: 1.25rem;
+    margin: 1rem;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .focus-inner h2 {
+    font-size: 1.1rem;
+    word-break: break-word;
+  }
+  .herramientas-grid {
+    grid-template-columns: 1fr;
+  }
+  .tool-acciones .btn-primario,
+  .tool-acciones .btn-secundario {
+    width: 100%;
+    text-align: center;
+  }
 }

@@ -177,9 +177,9 @@
     var pctEl = document.getElementById("ring-pct");
     if (!ring) return;
     var circ = 2 * Math.PI * 52;
+    ring.style.strokeDasharray = String(circ);
     var offset = circ - (porcentaje / 100) * circ;
-    ring.style.strokeDasharray = circ;
-    ring.style.strokeDashoffset = offset;
+    ring.style.strokeDashoffset = String(offset);
     if (pctEl) pctEl.textContent = Math.round(porcentaje) + "%";
   }
 
@@ -270,6 +270,7 @@
       initParticulas();
       initMapaOrbital();
       iniciarReloj();
+      actualizarAnilloProgreso(0);
       efectoMaquinaEscribir(
         document.getElementById("titulo-typed"),
         "Bienvenido al puente de mando",

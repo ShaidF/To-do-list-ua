@@ -1,0 +1,122 @@
+═══════════════════════════════════════════════════════════════
+  ÓRBITA — INSTRUCCIONES DE ENTREGA (FASE 2 / TERCER PARCIAL)
+═══════════════════════════════════════════════════════════════
+
+Basado en: Proyecto Grupal Final Fase 2 — Aplicaciones y Programación Web
+
+───────────────────────────────────────────────────────────────
+PASO 1 — Completar datos del grupo (carátula)
+───────────────────────────────────────────────────────────────
+1. Abre: Documentacion_Completa_ORBITA.html (doble clic).
+2. Reemplaza SOLO los textos entre corchetes [ ]:
+   • Carrera
+   • Nombres de integrantes (1 a 5)
+   • Grupo No., Semestre, Docente, Fecha
+   • URLs de GitHub (sección 7)
+   • Enlace del video (sección 9)
+
+───────────────────────────────────────────────────────────────
+PASO 2 — Publicar en GitHub Pages (OBLIGATORIO — 10%)
+───────────────────────────────────────────────────────────────
+1. Crear repositorio público en GitHub.
+2. Subir TODA la carpeta WEB (index.html, css/, js/, data/, icons/, sw.js, etc.).
+3. Settings → Pages → Deploy from branch → main → / (root).
+4. Esperar URL: https://[usuario].github.io/[repositorio]/
+5. Probar: crear misión → F5 → debe seguir visible.
+6. Anotar URLs en sección 7 del documento.
+
+───────────────────────────────────────────────────────────────
+PASO 3 — Capturas de pantalla (MÍNIMO 15 — sección 5 del doc)
+───────────────────────────────────────────────────────────────
+Guardar en: documentacion\capturas\
+
+OBLIGATORIAS según el PDF:
+  ✓ Estructura del proyecto        → 01_estructura_carpetas.png
+  ✓ HTML                           → 02_editor_index_html.png
+  ✓ CSS                            → 12_codigo_css.png
+  ✓ JavaScript                     → 11_codigo_javascript.png
+  ✓ localStorage funcionando       → 13_localstorage_devtools.png
+  ✓ Persistencia al recargar       → 14_persistencia_recarga.png
+  ✓ Repositorio GitHub             → 15_repositorio_github.png
+  ✓ Configuración GitHub Pages     → 16_github_pages_config.png
+  ✓ Sitio publicado                → 17_sitio_publicado.png
+
+Complementarias (llegar a 15+):
+  03_pagina_inicio.png, 04_menu_navegacion.png, 05_formulario_vacio.png,
+  06_formulario_errores.png, 07_mision_lanzada.png, 08_panel_misiones.png,
+  09_archivo_estelar.png, 10_modo_dia.png
+
+Cómo capturar localStorage:
+  F12 → Application (Aplicación) → Local Storage → file:// o tu URL
+  → mostrar clave "orbita_misiones" con JSON de misiones.
+
+───────────────────────────────────────────────────────────────
+PASO 4 — Video grupal (~5 minutos) (OBLIGATORIO — 10%)
+───────────────────────────────────────────────────────────────
+Grabar pantalla + voz (OBS, Zoom, etc.) incluyendo:
+
+  PARTE GRUPAL:
+  • Presentación del proyecto y objetivos
+  • Demostración en funcionamiento (crear misión, completar, recargar)
+
+  PARTE INDIVIDUAL (cada integrante explica UN tema):
+  • HTML          → index.html, estructura y formulario
+  • CSS           → styles.css, temas y responsive
+  • JavaScript    → app.js, validación y eventos
+  • localStorage  → DevTools + guardar/cargar datos
+  • GitHub Pages  → repo, Pages y URL publicada
+
+Ver guion detallado en Documentacion_Completa_ORBITA.html → Sección 9.
+Subir video a YouTube (no listado) o Drive (enlace público) y pegar URL en sección 9.
+
+───────────────────────────────────────────────────────────────
+PASO 5 — Fichas individuales (una por integrante)
+───────────────────────────────────────────────────────────────
+1. Copiar Ficha_Individual_PLANTILLA.html por cada persona.
+2. Renombrar: Ficha_Integrante_NombreApellido.html
+3. Completar rol, archivos y guion de su parte del video.
+4. Exportar cada ficha a PDF.
+
+───────────────────────────────────────────────────────────────
+PASO 6 — Exportar documento grupal a PDF
+───────────────────────────────────────────────────────────────
+Chrome o Edge → Abrir Documentacion_Completa_ORBITA.html
+→ Ctrl + P → Guardar como PDF
+
+───────────────────────────────────────────────────────────────
+PASO 7 — Comprimir y entregar ZIP
+───────────────────────────────────────────────────────────────
+
+   Proyecto_ORBITA_GrupoX_Fase2.zip
+   ├── WEB/                          ← código completo
+   └── documentacion/
+       ├── Documentacion_Completa_ORBITA.pdf
+       ├── Ficha_Individual_....pdf  ← una por integrante
+       ├── capturas/                 ← mínimo 15 imágenes
+       └── INSTRUCCIONES_ENTREGA.txt
+
+Entregar también el ENLACE DEL VIDEO por el medio que indique la docente.
+
+───────────────────────────────────────────────────────────────
+CHECKLIST RÁPIDO (marque antes de entregar)
+───────────────────────────────────────────────────────────────
+☐ Carátula con carrera, integrantes, docente y fecha
+☐ Introducción + problemática
+☐ Objetivos general y específicos
+☐ 15+ capturas (incl. localStorage, GitHub, Pages, sitio)
+☐ Descripción técnica completa
+☐ URLs reales en sección 7
+☐ Conclusiones redactadas
+☐ Video ~5 min con parte grupal e individual
+☐ Ficha PDF por cada integrante
+☐ Proyecto WEB funcional en el ZIP
+
+CRITERIOS DE EVALUACIÓN:
+  Funcionalidad .............. 30%
+  HTML y CSS ................. 20%
+  JavaScript ................. 20%
+  localStorage ............... 10%
+  GitHub Pages ............... 10%
+  Exposición (video) ......... 10%
+
+═══════════════════════════════════════════════════════════════

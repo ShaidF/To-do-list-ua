@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="css/features.css">
 </head>
 <body>
+  <a href="#contenido-principal" class="skip-link">Saltar al contenido</a>
   <canvas id="fx-canvas" class="fx-canvas" aria-hidden="true"></canvas>
   <div class="starfield" id="starfield" aria-hidden="true"></div>
   <div id="cohete-lanzamiento" class="cohete-lanzamiento oculto" aria-hidden="true">🚀</div>
@@ -39,7 +40,11 @@
   </header>
 
   <nav class="nav-principal" aria-label="Navegación principal">
-    <ul>
+    <button type="button" id="btn-menu-movil" class="btn-menu-movil" aria-expanded="false" aria-controls="nav-lista">
+      <span class="btn-menu-icon" aria-hidden="true">☰</span>
+      <span class="btn-menu-texto">Menú de secciones</span>
+    </button>
+    <ul id="nav-lista">
       <li><a href="#inicio" class="nav-link activo">Inicio</a></li>
       <li><a href="#nueva-mision" class="nav-link">Nueva misión</a></li>
       <li><a href="#panel-misiones" class="nav-link">Panel activo</a></li>
@@ -50,7 +55,7 @@
     </ul>
   </nav>
 
-  <main class="contenedor-principal">
+  <main id="contenido-principal" class="contenedor-principal">
     <!-- SECCIÓN 1: INICIO -->
     <section id="inicio" class="seccion seccion-hero" aria-labelledby="titulo-inicio">
       <article class="hero-card">
@@ -133,21 +138,24 @@
         </div>
 
         <div class="campo-fila">
-        <div class="campo-grupo">
-          <label>Prioridad orbital</label>
-          <div class="prioridad-chips" role="group" aria-label="Seleccionar prioridad">
-            <button type="button" class="chip-prioridad" data-prioridad="baja">Exterior</button>
-            <button type="button" class="chip-prioridad" data-prioridad="media">Media</button>
-            <button type="button" class="chip-prioridad" data-prioridad="alta">Crítica</button>
+          <div class="campo-grupo">
+            <label id="label-prioridad">Prioridad orbital</label>
+            <div class="prioridad-chips" role="radiogroup" aria-labelledby="label-prioridad">
+              <input type="radio" name="prioridad-radio" id="prioridad-baja" value="baja" class="prioridad-radio sr-only">
+              <label for="prioridad-baja" class="chip-prioridad" data-prioridad="baja">Exterior</label>
+              <input type="radio" name="prioridad-radio" id="prioridad-media" value="media" class="prioridad-radio sr-only">
+              <label for="prioridad-media" class="chip-prioridad" data-prioridad="media">Media</label>
+              <input type="radio" name="prioridad-radio" id="prioridad-alta" value="alta" class="prioridad-radio sr-only">
+              <label for="prioridad-alta" class="chip-prioridad" data-prioridad="alta">Crítica</label>
+            </div>
+            <select id="prioridad-mision" name="prioridad" required class="select-oculto-visual" tabindex="-1" aria-hidden="true">
+              <option value="">— Seleccionar —</option>
+              <option value="baja">Baja — órbita exterior</option>
+              <option value="media">Media — órbita media</option>
+              <option value="alta">Alta — órbita crítica</option>
+            </select>
+            <span class="error-campo" id="error-prioridad" role="alert"></span>
           </div>
-          <select id="prioridad-mision" name="prioridad" required class="select-oculto-visual">
-            <option value="">— Seleccionar —</option>
-            <option value="baja">Baja — órbita exterior</option>
-            <option value="media">Media — órbita media</option>
-            <option value="alta">Alta — órbita crítica</option>
-          </select>
-          <span class="error-campo" id="error-prioridad" role="alert"></span>
-        </div>
 
           <div class="campo-grupo">
             <label for="fecha-mision">Fecha límite</label>
@@ -310,12 +318,15 @@
           de tareas con almacenamiento local en el navegador.
         </p>
         <ul class="lista-tecnica">
-          <li>Estructura HTML5 con navegación y 5 secciones</li>
+          <li>Estructura HTML5 semántica con navegación sticky y 7 secciones</li>
+          <li>Menú responsive (colapsable en móvil) y scroll suave entre anclas</li>
+          <li>Diseño adaptable: tablet, móvil y pantallas pequeñas (media queries)</li>
           <li>Formulario con validación en tiempo real</li>
           <li>Mapa orbital animado y sistema de partículas</li>
           <li>Modal de detalle, búsqueda, orden y cuenta regresiva</li>
+          <li>Calendario, exportación JSON e importación de datos</li>
           <li>Logros desbloqueables y efectos al completar misiones</li>
-          <li>Persistencia con <code>localStorage</code></li>
+          <li>Persistencia con <code>localStorage</code> (misiones, tema, logros y preferencias)</li>
         </ul>
         <div id="logros-panel" class="logros-panel" aria-label="Logros desbloqueados"></div>
         <button type="button" id="btn-mostrar-creditos" class="btn-secundario">
@@ -327,7 +338,8 @@
   </main>
 
   <footer class="site-footer">
-    <p>Proyecto Grupal — Fase 1 · Aplicaciones Web · <span id="anio-footer"></span></p>
+    <p class="storage-status" id="storage-status" aria-live="polite">0 misiones guardadas</p>
+    <p>Proyecto Grupal — Fase 2 · Aplicaciones Web · <span id="anio-footer"></span></p>
   </footer>
 
   <div id="modal-mision" class="modal-overlay oculto" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
@@ -371,6 +383,10 @@
       </div>
     </div>
   </aside>
+
+  <button type="button" id="btn-volver-arriba" class="btn-volver-arriba oculto" aria-label="Volver arriba" title="Volver arriba">
+    ↑
+  </button>
 
   <div id="toast-global" class="toast-global oculto" role="status" aria-live="polite"></div>
   <div id="atajos-ayuda" class="atajos-ayuda oculto" role="complementary"></div>

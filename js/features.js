@@ -25,13 +25,21 @@
   }
 
   function registrarCompletado() {
-    var hoy = new Date().toISOString().split("T")[0];
-    var d = JSON.parse(localStorage.getItem(STREAK_KEY) || "{}");
+    var hoy = app.getFechaHoyLocal();
+    var ayer = (function () {
+      var d = new Date();
+      d.setDate(d.getDate() - 1);
+      return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+    })();
+    var d;
+    try {
+      d = JSON.parse(localStorage.getItem(STREAK_KEY) || "{}");
+    } catch (e) {
+      d = {};
+    }
     if (d.ultimo === hoy) return;
     if (d.ultimo) {
-      var ayer = new Date();
-      ayer.setDate(ayer.getDate() - 1);
-      d.count = d.ultimo === ayer.toISOString().split("T")[0] ? (d.count || 0) + 1 : 1;
+      d.count = d.ultimo === ayer ? (d.count || 0) + 1 : 1;
     } else {
       d.count = 1;
     }
@@ -70,7 +78,7 @@
 
   function renderStatsCategorias() {
     var panel = document.getElementById("stats-categorias");
-    if (!panel) return;
+    if (!panel || !app) return;
     var cats = ["estudio", "trabajo", "personal", "salud"];
     var ms = app.getMisiones();
     var max = 1;
@@ -147,6 +155,8 @@
     document.getElementById("edit-cat").value = mision.categoria;
     document.getElementById("edit-tags").value = (mision.etiquetas || []).join(", ");
     document.getElementById("edit-subs").value = (mision.subtareas || []).map(function (s) { return s.texto; }).join("\n");
+    var editFecha = document.getElementById("edit-fecha");
+    if (editFecha) editFecha.setAttribute("min", app.getFechaHoyLocal());
     document.getElementById("modal-titulo").dataset.editId = mision.id;
 
     setModalModo("ver");
@@ -165,7 +175,7 @@
   function guardarEdicionModal() {
     var id = document.getElementById("modal-titulo").dataset.editId;
     if (!id) return;
-    app.actualizar(id, {
+    var datos = {
       titulo: document.getElementById("edit-titulo").value,
       descripcion: document.getElementById("edit-desc").value,
       prioridad: document.getElementById("edit-prio").value,
@@ -173,7 +183,13 @@
       categoria: document.getElementById("edit-cat").value,
       etiquetas: app.parsearEtiquetas(document.getElementById("edit-tags").value),
       subtareas: app.parsearSubtareas(document.getElementById("edit-subs").value),
-    });
+    };
+    var errores = app.validarDatosMision(datos);
+    if (errores.length) {
+      app.mostrarToastGlobal("⚠ " + errores[0]);
+      return;
+    }
+    app.actualizar(id, datos);
     app.mostrarToastGlobal("✓ Misión actualizada");
     app.cerrarModal();
   }
@@ -184,9 +200,13 @@
     if (btn) btn.classList.remove("oculto");
   }
 
+  var dragDropInicializado = false;
+
   function initDragDrop() {
+    if (dragDropInicializado) return;
     var lista = document.getElementById("lista-activas");
     if (!lista) return;
+    dragDropInicializado = true;
     var draggedId = null;
 
     lista.addEventListener("dragstart", function (e) {
@@ -197,14 +217,17 @@
       draggedId = card.dataset.id;
       card.classList.add("arrastrando");
       e.dataTransfer.effectAllowed = "move";
+      e.dataTransfer.setData("text/plain", draggedId);
       if (document.getElementById("orden-misiones")) {
         document.getElementById("orden-misiones").value = "manual";
       }
     });
 
-    lista.addEventListener("dragend", function (e) {
-      var card = e.target.closest(".tarjeta-mision");
-      if (card) card.classList.remove("arrastrando");
+    lista.addEventListener("dragend", function () {
+      draggedId = null;
+      document.querySelectorAll(".tarjeta-mision.arrastrando").forEach(function (el) {
+        el.classList.remove("arrastrando");
+      });
       document.querySelectorAll(".drag-over").forEach(function (el) {
         el.classList.remove("drag-over");
       });
@@ -236,16 +259,36 @@
     });
   }
 
+  var calendarioDelegado = false;
+
+  function initCalendarioEventos() {
+    var grid = document.getElementById("calendario-grid");
+    if (!grid || calendarioDelegado) return;
+    calendarioDelegado = true;
+    grid.addEventListener("click", function (e) {
+      var cel = e.target.closest(".cal-celda[data-fecha]");
+      if (!cel) return;
+      var f = cel.dataset.fecha;
+      var list = app.getMisiones().filter(function (m) { return m.fecha === f; });
+      var detalle = document.getElementById("cal-detalle");
+      if (detalle) {
+        detalle.textContent = list.length
+          ? list.map(function (m) { return m.titulo; }).join(" · ")
+          : "Sin misiones este día";
+      }
+    });
+  }
+
   function renderCalendario() {
     var grid = document.getElementById("calendario-grid");
     var label = document.getElementById("cal-mes-label");
-    if (!grid) return;
+    if (!grid || !label || !app) return;
     var meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
     label.textContent = meses[calMonth] + " " + calYear;
     var first = new Date(calYear, calMonth, 1);
     var start = first.getDay();
     var days = new Date(calYear, calMonth + 1, 0).getDate();
-    var hoy = new Date().toISOString().split("T")[0];
+    var hoy = app.getFechaHoyLocal();
     var html = ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"].map(function (d) {
       return '<div class="cal-dia-nombre">' + d + "</div>";
     }).join("");
@@ -261,54 +304,63 @@
         '<span class="cal-num">' + d + "</span><div class='cal-puntos'>" + puntos + "</div></div>";
     }
     grid.innerHTML = html;
-    grid.querySelectorAll(".cal-celda[data-fecha]").forEach(function (cel) {
-      cel.addEventListener("click", function () {
-        var f = cel.dataset.fecha;
-        var list = app.getMisiones().filter(function (m) { return m.fecha === f; });
-        document.getElementById("cal-detalle").textContent = list.length
-          ? list.map(function (m) { return m.titulo; }).join(" · ")
-          : "Sin misiones este día";
-      });
-    });
   }
 
   function exportarJSON() {
     var blob = new Blob([JSON.stringify(app.getMisiones(), null, 2)], { type: "application/json" });
+    var url = URL.createObjectURL(blob);
     var a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "orbita-misiones-" + new Date().toISOString().slice(0, 10) + ".json";
+    a.href = url;
+    a.download = "orbita-misiones-" + app.getFechaHoyLocal() + ".json";
     a.click();
+    URL.revokeObjectURL(url);
     app.mostrarToastGlobal("📁 Exportación completada");
   }
 
-  function importarJSON(file) {
+  function importarJSON(file, inputEl) {
     var reader = new FileReader();
     reader.onload = function () {
       try {
         var data = JSON.parse(reader.result);
         if (!Array.isArray(data)) throw new Error("Formato inválido");
         app.setMisiones(data);
+        app.verificarLogros();
         app.mostrarToastGlobal("✓ " + data.length + " misiones importadas");
       } catch (err) {
         alert("Error al importar: " + err.message);
       }
+      if (inputEl) inputEl.value = "";
+    };
+    reader.onerror = function () {
+      alert("No se pudo leer el archivo.");
+      if (inputEl) inputEl.value = "";
     };
     reader.readAsText(file);
   }
 
+  function fechaFutura(dias) {
+    var d = new Date();
+    d.setDate(d.getDate() + dias);
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  }
+
   function cargarAPIMock() {
     fetch("data/misiones-ejemplo.json")
-      .then(function (r) { return r.json(); })
+      .then(function (r) {
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        return r.json();
+      })
       .then(function (data) {
+        if (!Array.isArray(data)) throw new Error("Formato inválido");
         var actuales = app.getMisiones();
         data.forEach(function (d, i) {
           actuales.push(app.normalizar({
             id: app.generarId(),
             titulo: d.titulo,
             descripcion: d.descripcion || "",
-            prioridad: d.prioridad,
-            fecha: d.fecha,
-            categoria: d.categoria,
+            prioridad: d.prioridad || "media",
+            fecha: d.fecha && d.fecha >= app.getFechaHoyLocal() ? d.fecha : fechaFutura(3 + i),
+            categoria: d.categoria || "personal",
             etiquetas: d.etiquetas || [],
             subtareas: (d.subtareas || []).map(function (s, j) {
               return { id: "sub-" + j, texto: s.texto || s, hecha: !!s.hecha };
@@ -319,10 +371,11 @@
           }, actuales.length));
         });
         app.setMisiones(actuales);
+        app.verificarLogros();
         app.mostrarToastGlobal("🛰 API mock: " + data.length + " misiones cargadas");
       })
-      .catch(function () {
-        alert("No se pudo cargar data/misiones-ejemplo.json. Usa un servidor local.");
+      .catch(function (err) {
+        alert("No se pudo cargar data/misiones-ejemplo.json. " + (err.message || "Usa un servidor local o GitHub Pages."));
       });
   }
 
@@ -349,9 +402,37 @@
       activas.map(function (m, i) {
         return i + 1 + ". " + m.titulo + " [" + m.prioridad + "] " + m.fecha;
       }).join("\n");
-    navigator.clipboard.writeText(txt).then(function () {
-      app.mostrarToastGlobal("📋 Resumen copiado al portapapeles");
-    });
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(txt).then(function () {
+        app.mostrarToastGlobal("📋 Resumen copiado al portapapeles");
+      }).catch(function () {
+        fallbackCopiar(txt);
+      });
+    } else {
+      fallbackCopiar(txt);
+    }
+  }
+
+  function fallbackCopiar(texto) {
+    var ta = document.createElement("textarea");
+    ta.value = texto;
+    ta.style.position = "fixed";
+    ta.style.left = "-9999px";
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand("copy");
+      app.mostrarToastGlobal("📋 Resumen copiado");
+    } catch (e) {
+      app.mostrarToastGlobal("No se pudo copiar. Selecciona el texto manualmente.");
+    }
+    document.body.removeChild(ta);
+  }
+
+  function cerrarFocus() {
+    focusId = null;
+    document.getElementById("focus-overlay").classList.add("oculto");
+    document.body.style.overflow = "";
   }
 
   function abrirFocusMode() {
@@ -411,8 +492,9 @@
         return;
       }
       var id = select.value;
-      document.getElementById("pomo-mision-label").textContent = id
-        ? app.getMisiones().find(function (m) { return m.id === id; }).titulo
+      var misionSel = id ? app.getMisiones().find(function (m) { return m.id === id; }) : null;
+      document.getElementById("pomo-mision-label").textContent = misionSel
+        ? misionSel.titulo
         : "Tiempo general";
       pomoActivo = true;
       document.getElementById("pomo-start").textContent = "Pausar";
@@ -464,19 +546,29 @@
 
   function initSyncTabs() {
     window.addEventListener("storage", function (e) {
-      if (e.key === "orbita_misiones" && e.newValue) {
-        try {
-          app.setMisiones(JSON.parse(e.newValue));
-          app.mostrarToastGlobal("↻ Datos sincronizados desde otra pestaña");
-        } catch (err) { /* ignore */ }
-      }
+      if (!app || e.key !== "orbita_misiones" || !e.newValue) return;
+      try {
+        app.setMisiones(JSON.parse(e.newValue));
+        app.mostrarToastGlobal("↻ Datos sincronizados desde otra pestaña");
+      } catch (err) { /* ignore */ }
     });
   }
 
   function registerSW() {
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("sw.js").catch(function () {});
-    }
+    if (!("serviceWorker" in navigator)) return;
+    navigator.serviceWorker.getRegistrations().then(function (regs) {
+      regs.forEach(function (reg) {
+        if (reg.active && reg.active.scriptURL.indexOf("sw.js") !== -1) {
+          reg.update();
+        }
+      });
+    });
+    navigator.serviceWorker.register("sw.js").catch(function () {});
+  }
+
+  function on(id, evt, fn) {
+    var el = document.getElementById(id);
+    if (el) el.addEventListener(evt, fn);
   }
 
   function init(A) {
@@ -493,18 +585,21 @@
       if (picker) picker.value = accent;
     }
 
-    document.getElementById("accent-color").addEventListener("input", function (e) {
-      aplicarAccent(e.target.value);
-    });
+    var accentPicker = document.getElementById("accent-color");
+    if (accentPicker) {
+      accentPicker.addEventListener("input", function (e) {
+        aplicarAccent(e.target.value);
+      });
+    }
 
-    document.getElementById("btn-solo-hoy").addEventListener("click", function () {
+    on("btn-solo-hoy", "click", function () {
       var on = !app.getFiltroSoloHoy();
       app.setFiltroSoloHoy(on);
       this.classList.toggle("activo", on);
       this.textContent = on ? "Ver todas" : "Solo hoy";
     });
 
-    document.getElementById("btn-undo").addEventListener("click", function () {
+    on("btn-undo", "click", function () {
       if (!undoStack) return;
       var ms = app.getMisiones();
       ms.unshift(app.normalizar(undoStack, 0));
@@ -514,15 +609,11 @@
       app.mostrarToastGlobal("↩ Misión restaurada");
     });
 
-    document.getElementById("btn-focus-mode").addEventListener("click", abrirFocusMode);
-    document.getElementById("focus-cerrar").addEventListener("click", function () {
-      document.getElementById("focus-overlay").classList.add("oculto");
-      document.body.style.overflow = "";
-    });
-    document.getElementById("focus-completar").addEventListener("click", function () {
+    on("btn-focus-mode", "click", abrirFocusMode);
+    on("focus-cerrar", "click", cerrarFocus);
+    on("focus-completar", "click", function () {
       if (focusId) app.completar(focusId, null);
-      document.getElementById("focus-overlay").classList.add("oculto");
-      document.body.style.overflow = "";
+      cerrarFocus();
     });
 
     document.querySelectorAll(".modal-tab").forEach(function (tab) {
@@ -531,43 +622,45 @@
       });
     });
 
-    document.getElementById("modal-guardar").addEventListener("click", guardarEdicionModal);
+    on("modal-guardar", "click", guardarEdicionModal);
 
-    document.getElementById("cal-prev").addEventListener("click", function () {
+    on("cal-prev", "click", function () {
       calMonth--;
       if (calMonth < 0) { calMonth = 11; calYear--; }
       renderCalendario();
     });
-    document.getElementById("cal-next").addEventListener("click", function () {
+    on("cal-next", "click", function () {
       calMonth++;
       if (calMonth > 11) { calMonth = 0; calYear++; }
       renderCalendario();
     });
 
-    document.getElementById("btn-exportar").addEventListener("click", exportarJSON);
-    document.getElementById("input-importar").addEventListener("change", function (e) {
-      if (e.target.files[0]) importarJSON(e.target.files[0]);
+    on("btn-exportar", "click", exportarJSON);
+    on("input-importar", "change", function (e) {
+      if (e.target.files[0]) importarJSON(e.target.files[0], e.target);
     });
-    document.getElementById("btn-cargar-api").addEventListener("click", cargarAPIMock);
-    document.getElementById("btn-notificaciones").addEventListener("click", activarNotificaciones);
-    document.getElementById("btn-compartir").addEventListener("click", compartirResumen);
-    document.getElementById("toggle-sonido").addEventListener("change", function (e) {
+    on("btn-cargar-api", "click", cargarAPIMock);
+    on("btn-notificaciones", "click", activarNotificaciones);
+    on("btn-compartir", "click", compartirResumen);
+    on("toggle-sonido", "change", function (e) {
       localStorage.setItem(SONIDO_KEY, e.target.checked ? "1" : "0");
     });
     if (localStorage.getItem(SONIDO_KEY) === "0") {
-      document.getElementById("toggle-sonido").checked = false;
+      var sonido = document.getElementById("toggle-sonido");
+      if (sonido) sonido.checked = false;
     }
 
     window.addEventListener("beforeinstallprompt", function (e) {
       e.preventDefault();
       deferredInstall = e;
     });
-    document.getElementById("btn-instalar-pwa").addEventListener("click", function () {
+    on("btn-instalar-pwa", "click", function () {
       if (deferredInstall) deferredInstall.prompt();
       else app.mostrarToastGlobal("Usa el menú del navegador → Instalar aplicación");
     });
 
     initDragDrop();
+    initCalendarioEventos();
     initPomodoro();
     initAtajos();
     initSyncTabs();
@@ -577,9 +670,9 @@
   }
 
   function postRender() {
+    if (!app) return;
     renderStatsCategorias();
     renderCalendario();
-    initDragDrop();
   }
 
   window.OrbitaFeatures = {
@@ -590,5 +683,6 @@
     registrarCompletado: registrarCompletado,
     feedbackExito: feedbackExito,
     getRacha: getRacha,
+    cerrarFocus: cerrarFocus,
   };
 })();

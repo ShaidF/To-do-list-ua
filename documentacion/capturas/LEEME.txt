@@ -1,15 +1,28 @@
-Coloca aquí tus capturas de pantalla (mínimo 10).
+Capturas para el Tercer Examen Parcial / Fase 2 (mínimo 15).
 
-Nombres recomendados:
-01_estructura_carpetas.png
-02_editor_index_html.png
-03_pagina_inicio.png
-04_menu_navegacion.png
-05_formulario_vacio.png
-06_formulario_errores.png
-07_archivo_estelar.png
-08_codigo_javascript.png
-09_codigo_css.png
+OBLIGATORIAS según el PDF del curso:
+  01_estructura_carpetas.png      — Estructura del proyecto
+  02_editor_index_html.png        — HTML
+  11_codigo_javascript.png        — JavaScript
+  12_codigo_css.png               — CSS
+  13_localstorage_devtools.png    — localStorage funcionando
+  14_persistencia_recarga.png     — Datos tras recargar (F5)
+  15_repositorio_github.png       — Repositorio GitHub
+  16_github_pages_config.png      — Configuración GitHub Pages
+  17_sitio_publicado.png          — Sitio publicado en Internet
 
-Cuando las guardes, actualiza las rutas en Documentacion_Completa_ORBITA.html
-o insértalas manualmente al imprimir a PDF desde Word.
+Recomendadas adicionales:
+  03_pagina_inicio.png
+  04_menu_navegacion.png
+  05_formulario_vacio.png
+  06_formulario_errores.png
+  07_mision_lanzada.png
+  08_panel_misiones.png
+  09_archivo_estelar.png
+  10_modo_dia.png
+
+También necesitan (fuera de esta carpeta):
+  • Video grupal ~5 min (enlace en sección 9 del documento)
+  • Ficha individual PDF por integrante
+
+Ver: documentacion/INSTRUCCIONES_ENTREGA.txt
